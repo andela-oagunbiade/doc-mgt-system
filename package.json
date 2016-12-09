@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "gulp default",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "istanbul cover _mocha -- -R spec test/**/*.spec.js"
   },
   "repository": {
     "type": "git",
@@ -39,6 +39,7 @@
     "eslint-plugin-import": "^2.2.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.1.2",
-    "mocha-lcov-reporter": "^1.2.0"
+    "mocha-lcov-reporter": "^1.2.0",
+    "supertest": "^2.0.1"
   }
 }
