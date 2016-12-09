@@ -4,6 +4,7 @@
   "description": "document management system with access rights",
   "main": "server.js",
   "scripts": {
+    "start": "gulp default",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -13,7 +14,9 @@
   "keywords": [
     "document",
     "management",
-    "system"
+    "system",
+    "api",
+    "javascript"
   ],
   "author": "ore agunbiade",
   "license": "ISC",

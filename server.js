@@ -1,6 +1,6 @@
 const express = require('express');
 const parser = require('body-parser');
-const routes = require('./config/routes')
+const routes = require('./config/routes');
 
 const port = process.env.PORT || 3000;
 
@@ -10,8 +10,7 @@ app.use(parser.urlencoded({ extended: true }));
 app.use(parser.json());
 
 app.use('/', routes);
-// app.use('/about', routes);
-// app.use('/contact', routes);
+
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });

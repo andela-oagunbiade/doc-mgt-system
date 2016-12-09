@@ -8,5 +8,5 @@ gulp.task('default', () => {
     env: {
       PORT: 9000
     }
-  })
+  });
 });
