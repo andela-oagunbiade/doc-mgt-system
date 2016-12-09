@@ -1,0 +1,30 @@
+{
+  "name": "doc-mgt-system",
+  "version": "1.0.0",
+  "description": "document management system with access rights",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andela-oagunbiade/doc-mgt-system.git"
+  },
+  "keywords": [
+    "document",
+    "management",
+    "system"
+  ],
+  "author": "ore agunbiade",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andela-oagunbiade/doc-mgt-system/issues"
+  },
+  "homepage": "https://github.com/andela-oagunbiade/doc-mgt-system#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "gulp": "^3.9.1",
+    "gulp-nodemon": "^2.2.1"
+  }
+}
