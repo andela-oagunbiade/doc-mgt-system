@@ -2,7 +2,13 @@ language:
   - node_js
 
 node_js:
-  - node
+  - 7
+  - 6
+
+services:
+  - postgresql
+
+
 
 # after_script:
 #   - node node_modules/codeclimate-test-reporter/bin/codeclimate < coverage/lcov.info
