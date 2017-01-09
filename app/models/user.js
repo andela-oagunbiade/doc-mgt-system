@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const user = sequelize.define('user', {
+  const User = sequelize.define('User', {
     userName: {
       allowNull: false,
       unique: true,
@@ -30,13 +30,16 @@ module.exports = (sequelize, DataTypes) => {
     classMethods: {
       associate(models) {
         // associations can be defined here
-        user.belongsTo(models.role, {
-          onDelete: 'CASCADE'
+        User.belongsTo(models.Role, {
+          onDelete: 'CASCADE',
+          foreignKey: {
+            allowNull: false
+          }
         });
 
-        user.hasMany(models.document, { foreignKey: 'OwnerId' });
+        User.hasMany(models.Document, { foreignKey: 'OwnerId' });
       }
     }
   });
-  return user;
+  return User;
 };

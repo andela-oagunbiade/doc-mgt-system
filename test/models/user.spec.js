@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-const user = require('../../app/models').user;
+const user = require('../../app/models').User;
 
 const sampleUser = {
   userName: 'oredavids',
