@@ -1,29 +1,21 @@
 const expect = require('chai').expect;
-const user = require('../../app/models').User;
-
-const sampleUser = {
-  userName: 'oredavids',
-  firstName: 'ore',
-  lastName: 'davids',
-  email: 'oredavids@gmail.com',
-  password: '123456',
-  role: 'admin'
-};
+const User = require('../../app/models').User;
+const params = require('../testHelper.js').testUser;
 
 describe('User Model', () => {
-  const User = user.build(sampleUser);
+  const user = User.build(params);
 
   describe('How User Model Works', () => {
     it('should be able to create an instance of \'user\' for this test', () => {
-      expect(User).not.to.be.null;
+      expect(user).not.to.be.null;
     });
     it('should create a user instance with all required fields', () => {
-      expect(User.userName).to.equal(sampleUser.userName);
-      expect(User.firstName).to.equal(sampleUser.firstName);
-      expect(User.lastName).to.equal(sampleUser.lastName);
-      expect(User.email).to.equal(sampleUser.email);
-      expect(User.password).to.equal(sampleUser.password);
-      expect(User.role).to.equal(sampleUser.role);
+      expect(user.userName).to.equal(params.userName);
+      expect(user.firstName).to.equal(params.firstName);
+      expect(user.lastName).to.equal(params.lastName);
+      expect(user.email).to.equal(params.email);
+      expect(user.password).to.equal(params.password);
+      expect(user.role).to.equal(params.role);
     });
   });
 });
