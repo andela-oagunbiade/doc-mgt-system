@@ -9,7 +9,7 @@ module.exports = {
     lastName: 'davids',
     email: 'oredavids@gmail.com',
     password: '123456',
-    role: 'admin'
+    RoleId: 1
   },
 
   testDocument: {
