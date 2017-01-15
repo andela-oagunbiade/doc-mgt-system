@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-expressions */
+
 const expect = require('chai').expect;
-const db = require('../../app/models');
+const model = require('../../app/models');
 const helper = require('../testHelper');
 
 const userParams = helper.testUser;
@@ -13,20 +15,21 @@ describe('User Model', () => {
   describe('How User Model Works', () => {
     let user;
     before(() => {
-      return db.Role.create(roleParams)
-        .then((role) => {
-          userParams.RoleId = role.id;
-          return db.User.create(userParams).then((newUser) => {
-            user = newUser;
+      return model.Role.create(roleParams)
+        .then((createdRole) => {
+          userParams.RoleId = createdRole.id;
+          return model.User.create(userParams).then((createdUser) => {
+            user = createdUser;
           });
         });
     });
 
     after(() => {
-      return db.sequelize.sync({ force: true });
+      return model.sequelize.sync({ force: true });
     });
 
     it('should be able to create a user', () => {
+      expect(user).to.exist;
       expect(typeof user).to.equal('object');
     });
     it('should create a user with username, first & last name', () => {
@@ -41,14 +44,14 @@ describe('User Model', () => {
       expect(user.password).to.not.equal(userParams.password);
     });
     it('should create a user with a defined Role', () => {
-      db.User.findById(user.id, { include: [db.Role] })
+      model.User.findById(user.id, { include: [model.Role] })
         .then((foundUser) => {
           expect(foundUser.Role.title).to.equal(roleParams.title);
         });
     });
 
     it('should be able to update a user', () => {
-      return db.User.findById(user.id)
+      return model.User.findById(user.id)
         .then((foundUser) => {
           return foundUser.update({ userName: 'mogims' });
         })
@@ -61,15 +64,15 @@ describe('User Model', () => {
   describe('How User model does Validation', () => {
     let user;
     beforeEach(() => {
-      return db.Role.create(roleParams)
+      return model.Role.create(roleParams)
         .then((role) => {
           userParams.RoleId = role.id;
-          user = db.User.build(userParams);
+          user = model.User.build(userParams);
         });
     });
 
     afterEach(() => {
-      return db.sequelize.sync({ force: true });
+      return model.sequelize.sync({ force: true });
     });
 
     describe('Required Fields', () => {
@@ -78,7 +81,6 @@ describe('User Model', () => {
           user[field] = null;
           return user.save()
             .catch((error) => {
-              // eslint-disable-next-line no-unused-expressions
               expect(/notNull Violation/.test(error.message)).to.be.true;
             });
         });
@@ -91,10 +93,9 @@ describe('User Model', () => {
           user.save()
             .then((firstUser) => {
               userParams.RoleId = firstUser.RoleId;
-              return db.User.build(userParams).save();
+              return model.User.build(userParams).save();
             })
             .catch((error) => {
-              // eslint-disable-next-line no-unused-expressions
               expect(/UniqueConstraintError/.test(error.name)).to.be.true;
             });
         });
@@ -106,11 +107,9 @@ describe('User Model', () => {
         user.email = 'oredavids yahoo';
         return user.save()
           .then((unsavedUser) => {
-            // eslint-disable-next-line no-unused-expressions
             expect(unsavedUser).to.exist;
           })
           .catch((error) => {
-            // eslint-disable-next-line no-unused-expressions
             expect(/isEmail failed/.test(error.name)).to.be.true;
           });
       });
@@ -120,7 +119,6 @@ describe('User Model', () => {
       it('should be valid if compared', () => {
         return user.save()
           .then((createdUser) => {
-            // eslint-disable-next-line no-unused-expressions
             expect(createdUser.passwordMatch(userParams.password)).to.be.true;
           });
       });

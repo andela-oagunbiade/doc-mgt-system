@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 const expect = require('chai').expect;
 const models = require('../../app/models');
 
