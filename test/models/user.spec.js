@@ -93,6 +93,7 @@ describe('User Model', () => {
           user.save()
             .then((firstUser) => {
               userParams.RoleId = firstUser.RoleId;
+              // attempt to create another user with same parameters
               return model.User.build(userParams).save();
             })
             .catch((error) => {

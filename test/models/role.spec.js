@@ -44,7 +44,7 @@ describe('Role Model', () => {
       it('ensures a role can only be created once(unique)', () => {
         return Role.create(roleParams)
           .then(() => {
-            // create a second user with same title
+            // attempt to create a second role with same title
             return Role.create(roleParams)
               .catch((error) => {
                 expect(/UniqueConstraintError/.test(error.name)).to.be.true;
