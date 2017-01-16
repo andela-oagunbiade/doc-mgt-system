@@ -8,12 +8,11 @@ module.exports = {
     firstName: 'ore',
     lastName: 'davids',
     email: 'oredavids@gmail.com',
-    password: '123456',
-    RoleId: 1
+    password: '123456'
   },
 
   testDocument: {
     title: 'Test Document',
-    text: 'Testing Testing'
+    content: 'A Model represents a table in the database. Also called a factory.'
   }
 };
