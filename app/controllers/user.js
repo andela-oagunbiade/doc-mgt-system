@@ -114,6 +114,26 @@ class UsersController {
           });
       });
   }
+
+  /**
+   * Method deleteUser to delete a single user
+   * @param {object} request - request object
+   * @param {object} response - response object
+   * @returns {Response} - response object
+   */
+  static deleteUser(request, response) {
+    model.User.findById(request.params.id)
+      .then((user) => {
+        if (!user) return response.status(404)
+          .send({ message: `Ǹo user with id: ${request.params.id}` });
+
+        user.destroy()
+          .then(() => {
+            return response.status(202)
+              .send({ message: 'User succesfully deleted' });
+          });
+      });
+  }
 }
 
 module.exports = UsersController;
