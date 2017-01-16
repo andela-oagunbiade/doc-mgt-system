@@ -29,9 +29,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      role: {
+      RoleId: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

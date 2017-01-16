@@ -15,6 +15,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TEXT
       },
+      OwnerId: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      access: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
