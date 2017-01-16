@@ -76,6 +76,23 @@ class UsersController {
           });
       });
   }
+
+  /**
+   * Method getUser to get a single user
+   * @param {object} request - request object
+   * @param {object} response - response object
+   * @returns {Response} - response object
+   */
+  static getUser(request, response) {
+    model.User.findById(request.params.id)
+      .then((user) => {
+        if (!user) return response.status(404)
+          .send({ message: `Ǹo user with id: ${request.params.id}` });
+
+        user = formattedUser(user);
+        return response.send(user);
+      });
+  }
 }
 
 module.exports = UsersController;
