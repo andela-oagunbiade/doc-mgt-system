@@ -38,6 +38,38 @@ class DocumentsController {
           .send(documents);
       });
   }
+
+  /**
+   * Method getDocument to obtain a document for a specific user
+   * @param {Object} request - request Object
+   * @param {Object} response - request Object
+   * @return {Object} documents Object
+   */
+  static getUserDocument(request, response) {
+    model.Document.findById(request.params.id)
+      .then((document) => {
+        if (!document) return response.status(404)
+          .send({ message: `No document found with id: ${request.params.id}` });
+        return response.status(200)
+          .send(document);
+      });
+  }
+
+  /**
+   * Method getUserDocument to obtain all documents for a specific user
+   * @param {Object} request - request Object
+   * @param {Object} response - request Object
+   * @return {Object} documents Object
+   */
+  static getUserDocuments(request, response) {
+    model.Document.findAll({ where: { OwnerId: request.params.id } })
+      .then((documents) => {
+        if (!documents) return response.status(404)
+          .send({ message: `No document found with id: ${request.params.id}` });
+        return response.status(200)
+          .send(documents);
+      });
+  }
 }
 
 module.exports = DocumentsController;
