@@ -134,6 +134,39 @@ class UsersController {
           });
       });
   }
+
+  /**
+   * Method login
+   * @param {object} request - request object
+   * @param {object} response - response object
+   * @returns {Response} - response object
+   */
+  static login(request, response) {
+    model.User.findOne({ where: { email: request.body.email } })
+      .then((user) => {
+        if (user && user.passwordMatch(request.body.password)) {
+          const token = jwt.sign({
+            UserId: user.id,
+            Role: user.role
+          }, secret, { expiresIn: '2 days' });
+          return response.status(200)
+            .send({ token, expiresIn: '2 days' });
+        }
+        return response.status(401)
+          .send({ message: 'Log in Failed' });
+      });
+  }
+
+  /**
+   * Method logout
+   * @param {object} request - request object
+   * @param {object} response - response object
+   * @returns {Response} - response object
+   */
+  static logout(request, response) {
+    return response.status(200)
+      .send({ message: 'Succesful logout' });
+  }
 }
 
 module.exports = UsersController;
