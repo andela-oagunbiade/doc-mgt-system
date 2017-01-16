@@ -90,6 +90,26 @@ class DocumentsController {
           });
       });
   }
+
+  /**
+   * Method deleteDocument
+   * @param {Object} request - request Object
+   * @param {Object} response - request Object
+   * @return {Object} response Object
+   */
+  static deleteDocument(request, response) {
+    model.Document.findById(request.params.id)
+      .then((document) => {
+        if (!document) return response.status(404)
+          .send({ message: `No document found with id: ${request.params.id}` });
+
+        document.destroy()
+          .then(() => {
+            return response.status(202)
+              .send({ message: 'Document succesfully deleted' });
+          });
+      });
+  }
 }
 
 module.exports = DocumentsController;
