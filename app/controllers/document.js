@@ -70,6 +70,26 @@ class DocumentsController {
           .send(documents);
       });
   }
+
+  /**
+   * Method updateDocument
+   * @param {Object} request - request Object
+   * @param {Object} response - request Object
+   * @return {Object} documents Object
+   */
+  static updateDocument(request, response) {
+    model.Document.findById(request.params.id)
+      .then((document) => {
+        if (!document) return response.status(404)
+          .send({ message: `No document found with id: ${request.params.id}` });
+
+        document.update(request.body)
+          .then((updatedDocument) => {
+            return response.status(202)
+              .send(updatedDocument);
+          });
+      });
+  }
 }
 
 module.exports = DocumentsController;
