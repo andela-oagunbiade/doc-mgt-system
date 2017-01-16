@@ -70,6 +70,26 @@ class RolesController {
           });
       });
   }
+
+  /**
+   * Method deleteRole
+   * @param {Object} request - request Object
+   * @param {Object} response - request Object
+   * @return {Object} response message
+   */
+  static deleteRole(request, response) {
+    model.Role.findById(request.params.id)
+      .then((role) => {
+        if (!role) return response.status(404)
+          .send({ message: `Ǹo role with id: ${request.params.role}` });
+
+        role.destroy()
+          .then(() => {
+            return response.status(202)
+              .send({ message: 'Succesfully deleted role' });
+          });
+      });
+  }
 }
 
 module.exports = RolesController;
