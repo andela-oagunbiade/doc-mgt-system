@@ -1,6 +1,10 @@
+/* eslint no-console: "off" */
+
 const express = require('express');
 const parser = require('body-parser');
-const routes = require('./config/routes');
+const homeRoute = require('./config/routes/index');
+const docRoutes = require('./config/routes/document');
+const userRoutes = require('./config/routes/user');
 
 const port = process.env.PORT || 3000;
 
@@ -9,8 +13,11 @@ const app = express();
 app.use(parser.urlencoded({ extended: true }));
 app.use(parser.json());
 
-app.use('/', routes);
+app.use('/', homeRoute);
+app.use('/documents', docRoutes);
+app.use('/users', userRoutes);
 
+// Start Server
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
