@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const db = require('../models');
+const model = require('../models');
 
 const secret = process.env.SECRET_TOKEN || 'secret';
 
@@ -22,9 +22,9 @@ const Auth = {
   },
 
   adminAccess(request, response, next) {
-    db.Role.findById(request.decoded.RoleId)
-      .then((role) => {
-        if (role.title === 'admin')
+    model.Role.findById(request.decoded.RoleId)
+      .then((foundRole) => {
+        if (foundRole.title === 'admin')
           next();
         else
           return response.status(403)
