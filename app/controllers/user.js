@@ -55,8 +55,8 @@ class UsersController {
    */
   static createUser(request, response) {
     model.User.findOne({ where: { email: request.body.email } })
-      .then((existingUser) => {
-        if (existingUser) return response.status(409)
+      .then((foundUser) => {
+        if (foundUser) return response.status(409)
             .send({ message: `Unable to create user. This mail:
               ${request.body.email} is already in use` });
 
@@ -86,12 +86,12 @@ class UsersController {
    */
   static getUser(request, response) {
     model.User.findById(request.params.id)
-      .then((user) => {
-        if (!user) return response.status(404)
+      .then((foundUser) => {
+        if (!foundUser) return response.status(404)
           .send({ message: `Ǹo user with id: ${request.params.id}` });
 
-        user = formattedUser(user);
-        return response.send(user);
+        foundUser = formattedUser(foundUser);
+        return response.send(foundUser);
       });
   }
 
@@ -103,11 +103,11 @@ class UsersController {
    */
   static updateUser(request, response) {
     model.User.findById(request.params.id)
-      .then((user) => {
-        if (!user) return response.status(404)
+      .then((foundUser) => {
+        if (!foundUser) return response.status(404)
           .send({ message: `Ǹo user with id: ${request.params.id}` });
 
-        user.update(request.body)
+        foundUser.update(request.body)
           .then((updatedUser) => {
             updatedUser = formattedUser(updatedUser);
             return response.status(202)
@@ -124,11 +124,11 @@ class UsersController {
    */
   static deleteUser(request, response) {
     model.User.findById(request.params.id)
-      .then((user) => {
-        if (!user) return response.status(404)
+      .then((foundUser) => {
+        if (!foundUser) return response.status(404)
           .send({ message: `Ǹo user with id: ${request.params.id}` });
 
-        user.destroy()
+        foundUser.destroy()
           .then(() => {
             return response.status(202)
               .send({ message: 'User succesfully deleted' });
@@ -144,11 +144,11 @@ class UsersController {
    */
   static login(request, response) {
     model.User.findOne({ where: { email: request.body.email } })
-      .then((user) => {
-        if (user && user.passwordMatch(request.body.password)) {
+      .then((foundUser) => {
+        if (foundUser && foundUser.passwordMatch(request.body.password)) {
           const token = jwt.sign({
-            UserId: user.id,
-            RoleId: user.RoleId
+            UserId: foundUser.id,
+            RoleId: foundUser.RoleId
           }, secret, { expiresIn: '2 days' });
           return response.status(200)
             .send({ token, expiresIn: '2 days' });
