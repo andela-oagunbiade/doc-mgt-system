@@ -147,7 +147,7 @@ class UsersController {
         if (user && user.passwordMatch(request.body.password)) {
           const token = jwt.sign({
             UserId: user.id,
-            Role: user.role
+            RoleId: user.RoleId
           }, secret, { expiresIn: '2 days' });
           return response.status(200)
             .send({ token, expiresIn: '2 days' });
