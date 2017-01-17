@@ -17,7 +17,6 @@ describe('Role Model', () => {
     after(() => {
       return Role.sequelize.sync({ force: true });
     });
-
     it('should be able to create a role', () => {
       expect(role).to.exist;
       expect(typeof role).to.equal('object');
@@ -29,7 +28,7 @@ describe('Role Model', () => {
   });
 
   describe('Role Model Validations', () => {
-    afterEach(() => {
+    after(() => {
       return Role.sequelize.sync({ force: true });
     });
 
@@ -42,7 +41,7 @@ describe('Role Model', () => {
       });
 
       it('ensures a role can only be created once(unique)', () => {
-        return Role.create(roleParams)
+        Role.create(roleParams)
           .then(() => {
             // attempt to create a second role with same title
             return Role.create(roleParams)
