@@ -1,5 +1,10 @@
 const model = require('../models');
 
+const accessCategories = {
+  public: 'public',
+  private: 'private'
+};
+
 class DocumentsController {
 
   /**
@@ -47,27 +52,33 @@ class DocumentsController {
    */
   static getUserDocument(request, response) {
     model.Document.findById(request.params.id)
-      .then((document) => {
-        if (!document) return response.status(404)
+      .then((foundDocument) => {
+        if (!foundDocument) return response.status(404)
           .send({ message: `No document found with id: ${request.params.id}` });
-        return response.status(200)
-          .send(document);
+        // eslint-disable-next-line curly
+        if ((foundDocument.access === accessCategories.public) ||
+          (foundDocument.OwnerId === request.decoded.UserId)) {
+          return response.status(200)
+            .send(foundDocument);
+        }
+        return response.status(403)
+          .send({ message: 'YOu are not permitted to access this document' });
       });
   }
 
   /**
-   * Method getUserDocument to obtain all documents for a specific user
+   * Method getUserDocuments to obtain all documents for a specific user
    * @param {Object} request - request Object
    * @param {Object} response - request Object
    * @return {Object} documents Object
    */
   static getUserDocuments(request, response) {
     model.Document.findAll({ where: { OwnerId: request.params.id } })
-      .then((documents) => {
-        if (!documents) return response.status(404)
+      .then((foundDocuments) => {
+        if (!foundDocuments) return response.status(404)
           .send({ message: `No document found with id: ${request.params.id}` });
         return response.status(200)
-          .send(documents);
+          .send(foundDocuments);
       });
   }
 
@@ -79,11 +90,11 @@ class DocumentsController {
    */
   static updateDocument(request, response) {
     model.Document.findById(request.params.id)
-      .then((document) => {
-        if (!document) return response.status(404)
+      .then((foundDocument) => {
+        if (!foundDocument) return response.status(404)
           .send({ message: `No document found with id: ${request.params.id}` });
 
-        document.update(request.body)
+        foundDocument.update(request.body)
           .then((updatedDocument) => {
             return response.status(202)
               .send(updatedDocument);
@@ -99,11 +110,11 @@ class DocumentsController {
    */
   static deleteDocument(request, response) {
     model.Document.findById(request.params.id)
-      .then((document) => {
-        if (!document) return response.status(404)
+      .then((foundDocument) => {
+        if (!foundDocument) return response.status(404)
           .send({ message: `No document found with id: ${request.params.id}` });
 
-        document.destroy()
+        foundDocument.destroy()
           .then(() => {
             return response.status(202)
               .send({ message: 'Document succesfully deleted' });
