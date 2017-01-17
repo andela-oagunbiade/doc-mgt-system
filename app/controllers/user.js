@@ -10,6 +10,7 @@ const formattedUser = (user) => {
     userName: user.userName,
     firstName: user.firstName,
     lastName: user.lastName,
+    email: user.email,
     RoleId: user.RoleId,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt
