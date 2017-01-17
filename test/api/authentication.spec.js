@@ -41,7 +41,6 @@ describe('User Authentication', () => {
     request.get('/users')
       .set({ Authorization: 'trinity' })
       .end((error, response) => {
-        console.log(`here is my response -------------${response.status}`);
         expect(response.status).to.equal(401);
         done();
       });
@@ -51,6 +50,7 @@ describe('User Authentication', () => {
       .set({ Authorization: token })
       .end((error, response) => {
         expect(response.status).to.equal(202);
+        // eslint-disable-next-line no-unused-expressions
         expect(Array.isArray(response.body)).to.be.true;
         expect(response.body.length).to.be.greaterThan(0);
         done();
