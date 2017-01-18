@@ -3,6 +3,10 @@ module.exports = {
     title: 'admin'
   },
 
+  testRole2: {
+    title: 'regular'
+  },
+
   testUser: {
     userName: 'oredavids',
     firstName: 'ore',
