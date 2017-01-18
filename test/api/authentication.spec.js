@@ -7,8 +7,6 @@ const helper = require('../testHelper');
 const userParams = helper.testUser;
 const roleParams = helper.testRole;
 
-
-
 describe('User Authentication', () => {
   let token;
   beforeEach((done) => {
