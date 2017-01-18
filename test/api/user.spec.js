@@ -46,10 +46,11 @@ describe('User API', () => {
     });
 
     describe('GET: (/users) - GET USERS', () => {
-      it('should return not authorize a user without token', () => {
+      it('should not authorize a user without token', (done) => {
         request.get('/users')
           .end((error, response) => {
             expect(response.status).to.equal(401);
+            done();
           });
       });
       it('should not authorize a user who supplies invalid token', (done) => {
