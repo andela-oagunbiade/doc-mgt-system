@@ -45,12 +45,12 @@ class DocumentsController {
   }
 
   /**
-   * Method getDocument to obtain a document for a specific user
+   * Method getDocument to obtain a document
    * @param {Object} request - request Object
    * @param {Object} response - request Object
    * @return {Object} documents Object
    */
-  static getUserDocument(request, response) {
+  static getDocument(request, response) {
     model.Document.findById(request.params.id)
       .then((foundDocument) => {
         if (!foundDocument) return response.status(404)

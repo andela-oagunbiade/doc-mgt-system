@@ -9,7 +9,7 @@ router.route('/')
   .post(auth.verifyToken, documentsController.createDocument);
 
 router.route('/:id')
-  .get(auth.verifyToken, documentsController.getUserDocument)
+  .get(auth.verifyToken, documentsController.getDocument)
   .put(auth.verifyToken, documentsController.updateDocument)
   .delete(auth.verifyToken, documentsController.deleteDocument);
 
