@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "gulp default",
-    "test": "istanbul cover _mocha -- -R spec test/**/*.spec.js"
+    "lint": "eslint .",
+    "test": "istanbul cover _mocha -- -R spec test/**/*.spec.js",
+    "db:test": "NODE_ENV=test sequelize db:migrate"
   },
   "repository": {
     "type": "git",
@@ -27,16 +29,17 @@
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
+    "chai": "^3.5.0",
     "express": "^4.14.0",
     "gulp": "^3.9.1",
     "gulp-nodemon": "^2.2.1",
     "jsonwebtoken": "^7.2.1",
     "pg": "^6.1.0",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^3.27.0"
+    "sequelize": "^3.27.0",
+    "supertest": "^2.0.1"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
     "codeclimate-test-reporter": "^0.4.0",
     "coveralls": "^2.11.15",
     "eslint": "^3.10.1",
@@ -44,7 +47,6 @@
     "eslint-plugin-import": "^2.2.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.1.2",
-    "mocha-lcov-reporter": "^1.2.0",
-    "supertest": "^2.0.1"
+    "mocha-lcov-reporter": "^1.2.0"
   }
 }
