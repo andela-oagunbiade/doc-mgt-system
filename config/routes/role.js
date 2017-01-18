@@ -8,7 +8,7 @@ router.route('/')
   .post(auth.verifyToken, auth.adminAccess, rolesController.createRole);
 
 router.route('/:id')
-  .get(auth.verifyToken, auth.adminAccess, rolesController.getRoles)
+  .get(auth.verifyToken, auth.adminAccess, rolesController.getRole)
   .put(auth.verifyToken, auth.adminAccess, rolesController.updateRole)
   .delete(auth.verifyToken, auth.adminAccess, rolesController.deleteRole);
 
