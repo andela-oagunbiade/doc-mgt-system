@@ -19,7 +19,8 @@ const formattedUser = (user) => {
 };
 
 /**
- *
+ * Class UsersController
+ * To handle routing logic for documents route
  */
 class UsersController {
 
@@ -27,7 +28,7 @@ class UsersController {
    * Method getUsers to obtain all users
    * @param {object} request - request object
    * @param {object} response - response object
-   * @returns {Response} response object
+   * @returns {Object} response object
    */
   static getUsers(request, response) {
     model.User.findAll({
@@ -51,7 +52,7 @@ class UsersController {
    * Method createUser to create a user
    * @param {object} request - request object
    * @param {object} response - response object
-   * @returns {Response} - response object
+   * @returns {Object} - response object
    */
   static createUser(request, response) {
     model.User.findOne({ where: { email: request.body.email } })
@@ -82,7 +83,7 @@ class UsersController {
    * Method getUser to get a single user
    * @param {object} request - request object
    * @param {object} response - response object
-   * @returns {Response} - response object
+   * @returns {Object} - response object
    */
   static getUser(request, response) {
     model.User.findById(request.params.id)
@@ -99,7 +100,7 @@ class UsersController {
    * Method updateUser
    * @param {object} request - request object
    * @param {object} response - response object
-   * @returns {Response} - response object
+   * @returns {object} - response object
    */
   static updateUser(request, response) {
     model.User.findById(request.params.id)
@@ -120,7 +121,7 @@ class UsersController {
    * Method deleteUser to delete a single user
    * @param {object} request - request object
    * @param {object} response - response object
-   * @returns {Response} - response object
+   * @returns {object} - response object
    */
   static deleteUser(request, response) {
     model.User.findById(request.params.id)
@@ -140,7 +141,7 @@ class UsersController {
    * Method login
    * @param {object} request - request object
    * @param {object} response - response object
-   * @returns {Response} - response object
+   * @returns {object} - response object
    */
   static login(request, response) {
     model.User.findOne({ where: { email: request.body.email } })
@@ -162,7 +163,7 @@ class UsersController {
    * Method logout
    * @param {object} request - request object
    * @param {object} response - response object
-   * @returns {Response} - response object
+   * @returns {object} - response object
    */
   static logout(request, response) {
     return response.status(200)

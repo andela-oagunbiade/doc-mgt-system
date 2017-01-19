@@ -5,13 +5,17 @@ const accessCategories = {
   private: 'private'
 };
 
+/**
+ * Class DocumentsController
+ * To handle routing logic for documents route
+ */
 class DocumentsController {
 
   /**
    * Method createDocument
    * @param {Object} request - request Object
    * @param {Object} response - request Object
-   * @return {Object} documents Object
+   * @return {Object} response Object
    */
   static createDocument(request, response) {
     model.Document.create(request.body)
@@ -29,7 +33,7 @@ class DocumentsController {
    * Method getDocuments to obtain all documents
    * @param {Object} request - request Object
    * @param {Object} response - request Object
-   * @return {Object} documents Object
+   * @return {Object} response Object
    */
   static getDocuments(request, response) {
     const query = {
@@ -48,7 +52,7 @@ class DocumentsController {
    * Method getDocument to obtain a document
    * @param {Object} request - request Object
    * @param {Object} response - request Object
-   * @return {Object} documents Object
+   * @return {Object} response Object
    */
   static getDocument(request, response) {
     model.Document.findById(request.params.id)
@@ -70,7 +74,7 @@ class DocumentsController {
    * Method getUserDocuments to obtain all documents for a specific user
    * @param {Object} request - request Object
    * @param {Object} response - request Object
-   * @return {Object} documents Object
+   * @return {Object} response Object
    */
   static getUserDocuments(request, response) {
     model.Document.findAll({ where: { OwnerId: request.params.id } })
@@ -86,7 +90,7 @@ class DocumentsController {
    * Method updateDocument
    * @param {Object} request - request Object
    * @param {Object} response - request Object
-   * @return {Object} documents Object
+   * @return {Object} response Object
    */
   static updateDocument(request, response) {
     model.Document.findById(request.params.id)

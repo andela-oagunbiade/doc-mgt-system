@@ -1,12 +1,16 @@
 const model = require('../models');
 
+/**
+ * Class RolesController
+ * To handle routing logic for roles route
+ */
 class RolesController {
 
   /**
    * Method getRoles to obtain all roles
    * @param {Object} request - request Object
    * @param {Object} response - request Object
-   * @return {Object} roles Object
+   * @return {Object} response Object
    */
   static getRoles(request, response) {
     model.Role.findAll()
@@ -20,7 +24,7 @@ class RolesController {
    * Method createRole
    * @param {Object} request - request Object
    * @param {Object} response - request Object
-   * @return {Object} roles Object
+   * @return {Object} response Object
    */
   static createRole(request, response) {
     model.Role.create(request.body)
@@ -38,7 +42,7 @@ class RolesController {
    * Method getRole to obtain the role for a specific user
    * @param {Object} request - request Object
    * @param {Object} response - request Object
-   * @return {Object} response message
+   * @return {Object} response Object
    */
   static getRole(request, response) {
     model.Role.findById(request.params.id)
@@ -55,7 +59,7 @@ class RolesController {
    * Method updateRole
    * @param {Object} request - request Object
    * @param {Object} response - request Object
-   * @return {Object} response message
+   * @return {Object} response object
    */
   static updateRole(request, response) {
     model.Role.findById(request.params.id)
@@ -75,7 +79,7 @@ class RolesController {
    * Method deleteRole
    * @param {Object} request - request Object
    * @param {Object} response - request Object
-   * @return {Object} response message
+   * @return {Object} response object
    */
   static deleteRole(request, response) {
     model.Role.findById(request.params.id)
