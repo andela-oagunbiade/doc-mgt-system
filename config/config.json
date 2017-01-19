@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": null,
-    "password": null,
-    "database": "doc-mgt",
+    "username": "mogims",
+    "password": "password",
+    "database": "testdb",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
