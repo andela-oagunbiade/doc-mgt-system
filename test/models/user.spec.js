@@ -89,7 +89,7 @@ describe('User Model', () => {
 
     describe('Unique Fields', () => {
       uniqueFields.forEach((field) => {
-        it(`reqires ${field} field to be Unique`, () => {
+        it(`requires ${field} field to be Unique`, () => {
           user.save()
             .then((firstUser) => {
               userParams.RoleId = firstUser.RoleId;
