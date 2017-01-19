@@ -1,5 +1,7 @@
 /* eslint no-console: "off" */
 
+require('dotenv').config();
+
 const express = require('express');
 const parser = require('body-parser');
 const homeRoute = require('./config/routes/index');
