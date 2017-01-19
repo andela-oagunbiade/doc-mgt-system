@@ -12,7 +12,8 @@ services:
 
 before_script:
   - psql -c 'create database testdb;' -U postgres
-  - npm run db:test
+  - NODE_ENV=travis npm run db:migrate
+
 
 # after_script:
 #   - node node_modules/codeclimate-test-reporter/bin/codeclimate < coverage/lcov.info
