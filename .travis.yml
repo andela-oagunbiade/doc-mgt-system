@@ -1,9 +1,11 @@
+sudo: required
+dist: trusty
+
 language:
   - node_js
 
 node_js:
-  - 7
-  - 6
+  - node
 
 services:
   - postgresql
@@ -11,6 +13,10 @@ services:
 before_script:
   - psql -c 'create database testdb;' -U postgresql
   - npm run db:test
+
 # after_script:
 #   - node node_modules/codeclimate-test-reporter/bin/codeclimate < coverage/lcov.info
 #   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+
+addons:
+  - postgresql: "9.3"
