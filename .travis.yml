@@ -21,3 +21,5 @@ after_script:
 
 addons:
   - postgresql: "9.3"
+  - code_climate:
+        repo_token: 792078873c69a0364c8292f44cbb5e763356d53ae5aec9866a05088a5875d05b
