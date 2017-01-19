@@ -186,29 +186,30 @@ describe('DOCUMENT API', () => {
       });
 
       describe('GET: (/documents/:id - GET A DOCUMENT)', () => {
-        before((done) => {
-          console.log('This is privateUser Id-------', privateUser.id);
+        beforeEach((done) => {
           privateDocumentParams.OwnerId = privateUser.id;
 
           model.Document.create(privateDocumentParams)
             .then((createdDocument) => {
               privateDocument = createdDocument;
-              console.log('private DOcument OwnerId =-----------', privateDocument.OwnerId);
               done();
             });
         });
-
         it('should not return document when user is not the owner', (done) => {
           request.get(`/documents/${privateDocument.id}`)
             .set({ Authorization: publicToken })
             .expect(403, done);
         });
-        // TODO: Fix this test
-        // it('should return the document when the user is the owner', (done) => {
-        //   request.get(`/documents/${privateDocument.id}`)
-        //     .set({ Authorization: privateToken })
-        //     .expect(200, done);
-        // });
+        it('should return the document when the user is the owner', (done) => {
+          request.get(`/documents/${privateDocument.id}`)
+            .set({ Authorization: privateToken })
+            .end((error, response) => {
+              expect(response.status).to.equal(200);
+              expect(response.body.title).to.equal(privateDocumentParams.title);
+              expect(response.body.content).to.equal(privateDocumentParams.content);
+              done();
+            });
+        });
       });
     });
   });
