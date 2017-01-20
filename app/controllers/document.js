@@ -2,7 +2,8 @@ const model = require('../models');
 
 const accessCategories = {
   public: 'public',
-  private: 'private'
+  private: 'private',
+  role: 'role',
 };
 
 /**
@@ -65,8 +66,17 @@ class DocumentsController {
           return response.status(200)
             .send(foundDocument);
         }
-        return response.status(403)
-          .send({ message: 'YOu are not permitted to access this document' });
+
+        model.User.findById(foundDocument.OwnerId)
+          .then((owner) => {
+            if (owner.RoleId === request.decoded.RoleId)
+              return response.send(foundDocument);
+
+            response.status(403)
+              .send({
+                message: 'You are not permitted to access this document'
+              });
+          });
       });
   }
 
