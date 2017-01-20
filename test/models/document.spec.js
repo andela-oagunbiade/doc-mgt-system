@@ -54,6 +54,12 @@ describe('Document Model', () => {
           expect(createdDocument.OwnerId).to.equal(owner.id);
         });
     });
+    it('should create a document with publish date', () => {
+      document.save()
+      .then((createdDocument) => {
+        expect(createdDocument.createdAt).to.exist;
+      });
+    });
     it('should create a document with access set to public', () => {
       document.save()
         .then((createdDocument) => {
