@@ -5,12 +5,14 @@ const auth = require('../../app/controllers/authentication');
 
 
 router.route('/')
-  .get(auth.verifyToken, documentsController.getDocuments)
-  .post(auth.verifyToken, documentsController.createDocument);
+  .all(auth.verifyToken)
+  .get(documentsController.getDocuments)
+  .post(documentsController.createDocument);
 
 router.route('/:id')
-  .get(auth.verifyToken, documentsController.getDocument)
-  .put(auth.verifyToken, documentsController.updateDocument)
-  .delete(auth.verifyToken, documentsController.deleteDocument);
+  .all(auth.verifyToken)
+  .get(documentsController.getDocument)
+  .put(documentsController.updateDocument)
+  .delete(documentsController.deleteDocument);
 
 module.exports = router;
