@@ -109,7 +109,7 @@ describe('Role API', () => {
     describe('PUT: (/roles/:id) - EDIT ROLE', () => {
       it('should not perform edit if wrong id is supplied', (done) => {
         const fieldsToUpdate = { title: 'super Admin' };
-        request.put('/roles/45')
+        request.put('/roles/999999')
           .set({ Authorization: token })
           .send(fieldsToUpdate)
           .expect(404, done);
@@ -129,7 +129,7 @@ describe('Role API', () => {
 
     describe('DELETE: (/roles/:id) - DELETE ROLE', () => {
       it('should not perform delete action if wrong id is supplied', (done) => {
-        request.delete('/roles/45')
+        request.delete('/roles/999999')
           .set({ Authorization: token })
           .expect(404, done);
       });

@@ -78,7 +78,7 @@ describe('DOCUMENT API', () => {
         request.post('/documents')
           .set({ Authorization: publicToken })
           .send(invalidDocument)
-          .expect(400, done);
+          .expect(500, done);
       });
     });
 
@@ -100,6 +100,7 @@ describe('DOCUMENT API', () => {
               expect(response.status).to.equal(200);
               expect(Array.isArray(response.body)).to.be.true;
               expect(response.body.length).to.be.greaterThan(0);
+              expect(response.body[0].title).to.equal(publicDocumentParams.title);
               done();
             });
         });
