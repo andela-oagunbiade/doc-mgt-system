@@ -167,7 +167,7 @@ class UsersController {
    */
   static logout(request, response) {
     return response.status(200)
-      .send({ message: 'Succesful logout' });
+      .send({ message: 'Successful logout' });
   }
 }
 
