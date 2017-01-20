@@ -51,6 +51,7 @@ describe('User Authentication', () => {
         // eslint-disable-next-line no-unused-expressions
         expect(Array.isArray(response.body)).to.be.true;
         expect(response.body.length).to.be.greaterThan(0);
+        expect(response.body[0].userName).to.equal(userParams.userName);
         done();
       });
   });
