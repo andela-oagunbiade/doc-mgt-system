@@ -25,7 +25,7 @@ class DocumentsController {
           .send(newDocument);
       })
       .catch((error) => {
-        return response.status(400)
+        return response.status(500)
           .send(error.errors);
       });
   }
@@ -90,7 +90,8 @@ class DocumentsController {
     model.Document.findAll({ where: { OwnerId: request.params.id } })
       .then((foundDocuments) => {
         if (!foundDocuments) return response.status(404)
-          .send({ message: `No document found with id: ${request.params.id}` });
+          .send({ message: `No document found for user with id:\
+            ${request.params.id}` });
         return response.status(200)
           .send(foundDocuments);
       });
