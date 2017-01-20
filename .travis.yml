@@ -1,0 +1,25 @@
+sudo: required
+dist: trusty
+
+language:
+  - node_js
+
+node_js:
+  - node
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database testdb;' -U postgres
+  - NODE_ENV=travis npm run db:migrate
+
+
+after_script:
+  - node node_modules/codeclimate-test-reporter/bin/codeclimate < coverage/lcov.info
+  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+
+addons:
+  - postgresql: "9.3"
+  - code_climate:
+        repo_token: 792078873c69a0364c8292f44cbb5e763356d53ae5aec9866a05088a5875d05b
