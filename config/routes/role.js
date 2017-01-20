@@ -4,7 +4,7 @@ const rolesController = require('../../app/controllers/role');
 const auth = require('../../app/controllers/authentication');
 
 router.route('/')
-  .get(auth.verifyToken, rolesController.getRoles)
+  .get(auth.verifyToken, auth.adminAccess, rolesController.getRoles)
   .post(auth.verifyToken, auth.adminAccess, rolesController.createRole);
 
 router.route('/:id')
