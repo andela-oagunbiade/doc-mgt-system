@@ -14,8 +14,8 @@ describe('Document Model', () => {
     let document;
     let owner;
 
-    before(() => {
-      return model.Role.create(params.testRole)
+    before((done) => {
+      model.Role.create(params.testRole)
         .then((createdRole) => {
           userParams.RoleId = createdRole.id;
           return model.User.create(userParams);
@@ -23,6 +23,7 @@ describe('Document Model', () => {
         .then((createdUser) => {
           owner = createdUser;
           documentParams.OwnerId = owner.id;
+          done();
         });
     });
 

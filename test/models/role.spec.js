@@ -8,10 +8,11 @@ const roleParams = require('../testHelper').testRole;
 describe('Role Model', () => {
   describe('Create Role', () => {
     let role;
-    before(() => {
-      return Role.create(roleParams)
+    before((done) => {
+      Role.create(roleParams)
         .then((createdRole) => {
           role = createdRole;
+          done();
         });
     });
     after(() => {
@@ -33,20 +34,22 @@ describe('Role Model', () => {
     });
 
     describe('Title Field Validation', () => {
-      it('requires title field to create a role', () => {
-        return Role.create()
+      it('requires title field to create a role', (done) => {
+        Role.create()
           .catch((error) => {
             expect(/notNull Violation/.test(error.message)).to.be.true;
+            done();
           });
       });
 
-      it('ensures a role can only be created once(unique)', () => {
+      it('ensures a role can only be created once(unique)', (done) => {
         Role.create(roleParams)
           .then(() => {
             // attempt to create a second role with same title
-            return Role.create(roleParams)
+            Role.create(roleParams)
               .catch((error) => {
                 expect(/UniqueConstraintError/.test(error.name)).to.be.true;
+                done();
               });
           });
       });
