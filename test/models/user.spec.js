@@ -26,9 +26,7 @@ describe('User Model', () => {
         });
     });
 
-    after(() => {
-      return model.sequelize.sync({ force: true });
-    });
+    after(() => model.sequelize.sync({ force: true }));
 
     it('should be able to create a user', () => {
       expect(user).to.exist;
@@ -75,9 +73,7 @@ describe('User Model', () => {
         });
     });
 
-    afterEach(() => {
-      return model.sequelize.sync({ force: true });
-    });
+    afterEach(() => model.sequelize.sync({ force: true }));
 
     describe('Required Fields', () => {
       requiredFields.forEach((field) => {

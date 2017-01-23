@@ -20,13 +20,9 @@ describe('User API', () => {
       });
   });
 
-  afterEach(() => {
-    return model.User.destroy({ where: {} });
-  });
+  afterEach(() => model.User.destroy({ where: {} }));
 
-  after(() => {
-    return model.sequelize.sync({ force: true });
-  });
+  after(() => model.sequelize.sync({ force: true }));
 
   describe('REQUESTS', () => {
     beforeEach((done) => {

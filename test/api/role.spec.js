@@ -35,13 +35,9 @@ describe('Role API', () => {
       });
   });
 
-  afterEach(() => {
-    return model.Role.destroy({ where: { id: role.id } });
-  });
+  afterEach(() => model.Role.destroy({ where: { id: role.id } }));
 
-  after(() => {
-    return model.sequelize.sync({ force: true });
-  });
+  after(() => model.sequelize.sync({ force: true }));
 
   describe('REQUESTS', () => {
     describe('POST: (/roles) - CREATE ROLE', () => {

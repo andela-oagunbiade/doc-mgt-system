@@ -35,27 +35,26 @@ describe('DOCUMENT API', () => {
           .end((error, response) => {
             adminUser = response.body.newUser;
             publicToken = response.body.token;
-          });
-        request.post('/users')
-          .send(regularUserParams)
-          .end((error, response) => {
-            privateUser = response.body.newUser;
-            privateToken = response.body.token;
 
             request.post('/users')
-              .send(regularUserParams2)
+              .send(regularUserParams)
               .end((err, res) => {
-                privateUser2 = res.body.newUser;
-                privateToken2 = res.body.token;
-                done();
+                privateUser = res.body.newUser;
+                privateToken = res.body.token;
+
+                request.post('/users')
+                  .send(regularUserParams2)
+                  .end((err, res) => {
+                    privateUser2 = res.body.newUser;
+                    privateToken2 = res.body.token;
+                    done();
+                  });
               });
           });
       });
   });
 
-  after(() => {
-    return model.sequelize.sync({ force: true });
-  });
+  after(() => model.sequelize.sync({ force: true }));
 
   it('should correctly create test roles & user', () => {
     expect(adminRole.title).to.equal(adminRoleParams.title);
@@ -76,9 +75,7 @@ describe('DOCUMENT API', () => {
         });
     });
 
-    afterEach(() => {
-      return model.Document.destroy({ where: {} });
-    });
+    afterEach(() => model.Document.destroy({ where: {} }));
 
     describe('POST: (/documents) - CREATE A DOCUMENT', () => {
       it('should create a document for a validated user', (done) => {

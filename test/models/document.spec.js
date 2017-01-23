@@ -31,9 +31,7 @@ describe('Document Model', () => {
       document = model.Document.build(documentParams);
     });
 
-    after(() => {
-      return model.sequelize.sync({ force: true });
-    });
+    after(() => model.sequelize.sync({ force: true }));
 
     it('should be able to create a document', () => {
       document.save()

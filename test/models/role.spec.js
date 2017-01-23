@@ -15,9 +15,8 @@ describe('Role Model', () => {
           done();
         });
     });
-    after(() => {
-      return Role.sequelize.sync({ force: true });
-    });
+    after(() => Role.sequelize.sync({ force: true }));
+
     it('should be able to create a role', () => {
       expect(role).to.exist;
       expect(typeof role).to.equal('object');
@@ -29,9 +28,7 @@ describe('Role Model', () => {
   });
 
   describe('Role Model Validations', () => {
-    after(() => {
-      return Role.sequelize.sync({ force: true });
-    });
+    after(() => Role.sequelize.sync({ force: true }));
 
     describe('Title Field Validation', () => {
       it('requires title field to create a role', (done) => {
