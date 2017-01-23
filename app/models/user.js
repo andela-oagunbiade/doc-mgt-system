@@ -32,7 +32,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate(models) {
-        // associations can be defined here
         User.belongsTo(models.Role, {
           onDelete: 'CASCADE',
           foreignKey: {

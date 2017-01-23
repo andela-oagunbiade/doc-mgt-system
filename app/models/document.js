@@ -22,7 +22,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate(models) {
-        // associations can be defined here
         Document.belongsTo(models.User, {
           as: 'Owner',
           onDelete: 'CASCADE',
