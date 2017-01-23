@@ -3,7 +3,7 @@ const model = require('../models');
 const accessCategories = {
   public: 'public',
   private: 'private',
-  role: 'role',
+  role: 'role'
 };
 
 /**
@@ -68,9 +68,10 @@ class DocumentsController {
         }
 
         model.User.findById(foundDocument.OwnerId)
-          .then((owner) => {
-            if (owner.RoleId === request.decoded.RoleId)
-              return response.send(foundDocument);
+          .then((documentOwner) => {
+            if (documentOwner.RoleId === request.decoded.RoleId)
+              return response.status(200)
+                .send(foundDocument);
 
             response.status(403)
               .send({
