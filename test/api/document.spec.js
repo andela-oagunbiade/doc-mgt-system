@@ -12,6 +12,7 @@ const adminUserParams = helper.testUser;
 const regularUserParams = helper.testUser2;
 const publicDocumentParams = helper.testDocument;
 const privateDocumentParams = helper.testDocument2;
+const publicDocumentParams2 = helper.testDocument3;
 
 describe('DOCUMENT API', () => {
   let adminRole, regularRole, adminUser, publicToken, publicDocument, privateUser,
@@ -31,6 +32,12 @@ describe('DOCUMENT API', () => {
           .end((error, response) => {
             adminUser = response.body.newUser;
             publicToken = response.body.token;
+          });
+        request.post('/users')
+          .send(regularUserParams)
+          .end((error, response) => {
+            privateUser = response.body.newUser;
+            privateToken = response.body.token;
             done();
           });
       });
@@ -49,6 +56,7 @@ describe('DOCUMENT API', () => {
 
   describe('REQUESTS', () => {
     beforeEach((done) => {
+      publicDocumentParams.OwnerId = adminUser.id;
       model.Document.create(publicDocumentParams)
         .then((createdPublicDocument) => {
           publicDocument = createdPublicDocument;
@@ -62,14 +70,15 @@ describe('DOCUMENT API', () => {
 
     describe('POST: (/documents) - CREATE A DOCUMENT', () => {
       it('should create a document for a validated user', (done) => {
+        publicDocumentParams2.OwnerId = adminUser.id;
         request.post('/documents')
           .set({ Authorization: publicToken })
-          .send(privateDocumentParams)
+          .send(publicDocumentParams2)
           .end((error, response) => {
             expect(response.status).to.equal(201);
-            expect(response.body.title).to.equal(privateDocumentParams.title);
+            expect(response.body.title).to.equal(publicDocumentParams2.title);
             expect(response.body.content)
-              .to.equal(privateDocumentParams.content);
+              .to.equal(publicDocumentParams2.content);
             done();
           });
       });
@@ -132,6 +141,13 @@ describe('DOCUMENT API', () => {
             .send(fieldToUpdate)
             .expect(404, done);
         });
+        it('should not perform edit if User is not document Owner', (done) => {
+          const fieldToUpdate = { content: 'replace previous document' };
+          request.put(`/documents/${publicDocument.id}`)
+            .set({ Authorization: privateToken })
+            .send(fieldToUpdate)
+            .expect(403, done);
+        });
         it('should correctly edit document if valid id is provided', (done) => {
           const fieldToUpdate = { content: 'replace previous document' };
           request.put(`/documents/${publicDocument.id}`)
@@ -150,6 +166,13 @@ describe('DOCUMENT API', () => {
           request.delete('/documents/789')
             .set({ Authorization: publicToken })
             .expect(404, done);
+        });
+        it('should not perform delete if User is not document Owner', (done) => {
+          const fieldToUpdate = { content: 'replace previous document' };
+          request.delete(`/documents/${publicDocument.id}`)
+            .set({ Authorization: privateToken })
+            .send(fieldToUpdate)
+            .expect(403, done);
         });
         it('should succesfully delete when provided a valid Id', (done) => {
           request.delete(`/documents/${publicDocument.id}`)
@@ -170,16 +193,6 @@ describe('DOCUMENT API', () => {
     });
 
     describe('Requests for Private Documents', () => {
-      before((done) => {
-        request.post('/users')
-          .send(regularUserParams)
-          .end((error, response) => {
-            privateUser = response.body.newUser;
-            privateToken = response.body.token;
-            done();
-          });
-      });
-
       it('should have private user created', (done) => {
         expect(privateUser.firstName).to.equal('femi');
         expect(privateUser.id).to.equal(2);

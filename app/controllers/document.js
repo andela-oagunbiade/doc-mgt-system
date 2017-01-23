@@ -108,12 +108,15 @@ class DocumentsController {
       .then((foundDocument) => {
         if (!foundDocument) return response.status(404)
           .send({ message: `No document found with id: ${request.params.id}` });
-
-        foundDocument.update(request.body)
-          .then((updatedDocument) => {
-            return response.status(202)
-              .send(updatedDocument);
-          });
+        if (foundDocument.OwnerId === request.decoded.UserId)
+          foundDocument.update(request.body)
+            .then((updatedDocument) => {
+              return response.status(202)
+                .send(updatedDocument);
+            });
+        else
+          return response.status(403)
+            .send({ message: 'You are not the Owner of this document.' });
       });
   }
 
@@ -128,12 +131,15 @@ class DocumentsController {
       .then((foundDocument) => {
         if (!foundDocument) return response.status(404)
           .send({ message: `No document found with id: ${request.params.id}` });
-
-        foundDocument.destroy()
-          .then(() => {
-            return response.status(202)
-              .send({ message: 'Document succesfully deleted' });
-          });
+        if (foundDocument.OwnerId === request.decoded.UserId)
+          foundDocument.destroy()
+            .then(() => {
+              return response.status(202)
+                .send({ message: 'Document succesfully deleted' });
+            });
+        else
+          return response.status(403)
+            .send({ message: 'You are not the Owner of this document.' });
       });
   }
 }

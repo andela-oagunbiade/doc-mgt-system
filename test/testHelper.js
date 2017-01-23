@@ -32,5 +32,10 @@ module.exports = {
     title: 'Other Document',
     content: 'Buildpacks are scripts that are run when your app is deployed.',
     access: 'private'
+  },
+
+  testDocument3: {
+    title: 'One time Use',
+    content: 'Testing Testing'
   }
 };
