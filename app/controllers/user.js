@@ -57,9 +57,11 @@ class UsersController {
   static createUser(request, response) {
     model.User.findOne({ where: { email: request.body.email } })
       .then((foundUser) => {
-        if (foundUser) return response.status(409)
+        if (foundUser) {
+          return response.status(409)
             .send({ message: `Unable to create user. This mail:
               ${request.body.email} is already in use` });
+        }
 
         model.User.create(request.body)
           .then((newUser) => {
@@ -88,8 +90,10 @@ class UsersController {
   static getUser(request, response) {
     model.User.findById(request.params.id)
       .then((foundUser) => {
-        if (!foundUser) return response.status(404)
+        if (!foundUser) {
+          return response.status(404)
           .send({ message: `Ǹo user with id: ${request.params.id}` });
+        }
 
         foundUser = formattedUser(foundUser);
         return response.send(foundUser);
@@ -105,8 +109,10 @@ class UsersController {
   static updateUser(request, response) {
     model.User.findById(request.params.id)
       .then((foundUser) => {
-        if (!foundUser) return response.status(404)
+        if (!foundUser) {
+          return response.status(404)
           .send({ message: `Ǹo user with id: ${request.params.id}` });
+        }
 
         foundUser.update(request.body)
           .then((updatedUser) => {
@@ -126,8 +132,10 @@ class UsersController {
   static deleteUser(request, response) {
     model.User.findById(request.params.id)
       .then((foundUser) => {
-        if (!foundUser) return response.status(404)
+        if (!foundUser) {
+          return response.status(404)
           .send({ message: `Ǹo user with id: ${request.params.id}` });
+        }
 
         foundUser.destroy()
           .then(() => {
