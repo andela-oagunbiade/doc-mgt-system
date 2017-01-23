@@ -23,6 +23,14 @@ module.exports = {
     password: '123456'
   },
 
+  testUser3: {
+    userName: 'ethanol',
+    firstName: 'ethanet',
+    lastName: 'ethancode',
+    email: 'ethanol@gmail.com',
+    password: '123456'
+  },
+
   testDocument: {
     title: 'Test Document',
     content: 'A Model represents a table in the database. Also called a factory.'

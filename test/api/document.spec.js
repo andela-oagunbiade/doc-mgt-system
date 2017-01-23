@@ -10,13 +10,14 @@ const adminRoleParams = helper.testRole;
 const regularRoleParams = helper.testRole2;
 const adminUserParams = helper.testUser;
 const regularUserParams = helper.testUser2;
+const regularUserParams2 = helper.testUser3;
 const publicDocumentParams = helper.testDocument;
 const privateDocumentParams = helper.testDocument2;
 const publicDocumentParams2 = helper.testDocument3;
 
 describe('DOCUMENT API', () => {
-  let adminRole, regularRole, adminUser, publicToken, publicDocument, privateUser,
-    privateToken, privateDocument;
+  let adminRole, regularRole, adminUser, publicToken, publicDocument,
+    privateUser, privateUser2, privateToken, privateToken2, privateDocument;
 
   before((done) => {
     model.Role.bulkCreate([adminRoleParams, regularRoleParams], {
@@ -25,7 +26,9 @@ describe('DOCUMENT API', () => {
         adminRole = createdRoles[0];
         regularRole = createdRoles[1];
         adminUserParams.RoleId = adminRole.id;
+        // Two users here are assigned same RoleId to demonstrate role access
         regularUserParams.RoleId = regularRole.id;
+        regularUserParams2.RoleId = regularRole.id;
 
         request.post('/users')
           .send(adminUserParams)
@@ -38,6 +41,12 @@ describe('DOCUMENT API', () => {
           .end((error, response) => {
             privateUser = response.body.newUser;
             privateToken = response.body.token;
+          });
+        request.post('/users')
+          .send(regularUserParams2)
+          .end((error, response) => {
+            privateUser2 = response.body.newUser;
+            privateToken2 = response.body.token;
             done();
           });
       });
@@ -50,8 +59,10 @@ describe('DOCUMENT API', () => {
   it('should correctly create test roles & user', () => {
     expect(adminRole.title).to.equal(adminRoleParams.title);
     expect(regularRole.title).to.equal(regularRoleParams.title);
-    expect(adminUser).to.exist;
     expect(adminUser.email).to.equal(adminUserParams.email);
+    expect(privateUser.email).to.equal(regularUserParams.email);
+    expect(adminUser.id).to.equal(1);
+    expect(privateUser.id).to.equal(2);
   });
 
   describe('REQUESTS', () => {
@@ -91,7 +102,7 @@ describe('DOCUMENT API', () => {
       });
     });
 
-    describe('Requests for Public Documents', () => {
+    describe('Requests for Documents', () => {
       describe('GET: (/documents) - GET ALL DOCUMENTS', () => {
         it('should not return documents if no token is provided', (done) => {
           request.get('/documents')
@@ -193,12 +204,6 @@ describe('DOCUMENT API', () => {
     });
 
     describe('Requests for Private Documents', () => {
-      it('should have private user created', (done) => {
-        expect(privateUser.firstName).to.equal('femi');
-        expect(privateUser.id).to.equal(2);
-        done();
-      });
-
       describe('GET: (/documents/:id - GET A DOCUMENT)', () => {
         beforeEach((done) => {
           privateDocumentParams.OwnerId = privateUser.id;
@@ -224,6 +229,17 @@ describe('DOCUMENT API', () => {
               done();
             });
         });
+        it('should return the document when user has same role as owner',
+          (done) => {
+            request.get(`/documents/${privateDocument.id}`)
+              .set({ Authorization: privateToken2 })
+              .end((error, response) => {
+                expect(response.status).to.equal(200);
+                expect(response.body.title).to.equal(privateDocumentParams.title);
+                expect(response.body.content).to.equal(privateDocumentParams.content);
+                done();
+              });
+          });
       });
     });
   });
