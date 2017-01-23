@@ -65,7 +65,7 @@ describe('User API', () => {
         request.get('/users')
           .set({ Authorization: token })
           .end((error, response) => {
-            expect(response.status).to.equal(202);
+            expect(response.status).to.equal(200);
             // eslint-disable-next-line no-unused-expressions
             expect(Array.isArray(response.body)).to.be.true;
             expect(response.body.length).to.be.greaterThan(0);
@@ -107,7 +107,7 @@ describe('User API', () => {
           .set({ Authorization: token })
           .send(fieldsToUpdate)
           .end((error, response) => {
-            expect(response.status).to.equal(202);
+            expect(response.status).to.equal(200);
             expect(response.body.firstName).to.equal(fieldsToUpdate.firstName);
             done();
           });
@@ -124,7 +124,7 @@ describe('User API', () => {
         request.delete(`/users/${user.id}`)
           .set({ Authorization: token })
           .end((error, response) => {
-            expect(response.status).to.equal(202);
+            expect(response.status).to.equal(200);
             model.User.count()
               .then((userCount) => {
                 expect(userCount).to.equal(0);

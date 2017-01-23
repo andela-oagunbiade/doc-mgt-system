@@ -41,13 +41,14 @@ describe('DOCUMENT API', () => {
           .end((error, response) => {
             privateUser = response.body.newUser;
             privateToken = response.body.token;
-          });
-        request.post('/users')
-          .send(regularUserParams2)
-          .end((error, response) => {
-            privateUser2 = response.body.newUser;
-            privateToken2 = response.body.token;
-            done();
+
+            request.post('/users')
+              .send(regularUserParams2)
+              .end((err, res) => {
+                privateUser2 = res.body.newUser;
+                privateToken2 = res.body.token;
+                done();
+              });
           });
       });
   });
@@ -126,7 +127,7 @@ describe('DOCUMENT API', () => {
         });
       });
 
-      describe('GET: (/documents/:id) - GET A DOCUCUMENT', () => {
+      describe('GET: (/documents/:id) - GET A DOCUMENT', () => {
         it('should not return a document if invalid id is provided', (done) => {
           request.get('/documents/789')
             .set({ Authorization: publicToken })
@@ -165,7 +166,7 @@ describe('DOCUMENT API', () => {
             .set({ Authorization: publicToken })
             .send(fieldToUpdate)
             .end((error, response) => {
-              expect(response.status).to.equal(202);
+              expect(response.status).to.equal(200);
               expect(response.body.content).to.equal(fieldToUpdate.content);
               done();
             });
@@ -189,9 +190,10 @@ describe('DOCUMENT API', () => {
           request.delete(`/documents/${publicDocument.id}`)
             .set({ Authorization: publicToken })
             .end((error, response) => {
-              expect(response.status).to.equal(202);
+              expect(response.status).to.equal(200);
               expect(response.body.message)
-                .to.equal('Document succesfully deleted');
+
+                .to.equal('Document successfully deleted');
 
               model.Document.count()
                 .then((documentCount) => {

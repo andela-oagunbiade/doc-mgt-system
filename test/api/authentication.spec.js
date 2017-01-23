@@ -61,7 +61,7 @@ describe('User Authentication', () => {
     request.get('/users')
       .set({ Authorization: adminToken })
       .end((error, response) => {
-        expect(response.status).to.equal(202);
+        expect(response.status).to.equal(200);
         // eslint-disable-next-line no-unused-expressions
         expect(Array.isArray(response.body)).to.be.true;
         expect(response.body.length).to.be.greaterThan(0);

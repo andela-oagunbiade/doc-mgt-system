@@ -72,7 +72,7 @@ class RolesController {
 
         role.update(request.body)
           .then((updatedRole) => {
-            return response.status(202)
+            return response.status(200)
               .send(updatedRole);
           });
       });
@@ -94,7 +94,7 @@ class RolesController {
 
         role.destroy()
           .then(() => {
-            return response.status(202)
+            return response.status(200)
               .send({ message: 'Succesfully deleted role' });
           });
       });

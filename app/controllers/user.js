@@ -43,7 +43,7 @@ class UsersController {
         'updatedAt'
       ]
     }).then((users) => {
-      return response.status(202)
+      return response.status(200)
         .send(users);
     });
   }
@@ -117,7 +117,7 @@ class UsersController {
         foundUser.update(request.body)
           .then((updatedUser) => {
             updatedUser = formattedUser(updatedUser);
-            return response.status(202)
+            return response.status(200)
               .send(updatedUser);
           });
       });
@@ -139,7 +139,7 @@ class UsersController {
 
         foundUser.destroy()
           .then(() => {
-            return response.status(202)
+            return response.status(200)
               .send({ message: 'User succesfully deleted' });
           });
       });

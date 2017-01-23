@@ -120,7 +120,7 @@ describe('Role API', () => {
           .set({ Authorization: token })
           .send(fieldsToUpdate)
           .end((error, response) => {
-            expect(response.status).to.equal(202);
+            expect(response.status).to.equal(200);
             expect(response.body.title).to.equal(fieldsToUpdate.title);
             done();
           });
@@ -137,7 +137,7 @@ describe('Role API', () => {
         request.delete(`/roles/${role.id}`)
           .set({ Authorization: token })
           .end((error, response) => {
-            expect(response.status).to.equal(202);
+            expect(response.status).to.equal(200);
             expect(response.body.message).to.equal('Succesfully deleted role');
             done();
           });
