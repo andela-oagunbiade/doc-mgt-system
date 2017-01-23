@@ -24,7 +24,7 @@ const Auth = {
   adminAccess(request, response, next) {
     model.Role.findById(request.decoded.RoleId)
       .then((foundRole) => {
-        if (foundRole.title === 'admin')
+        if (foundRole.title.toLowerCase() === 'admin')
           next();
         else
           return response.status(403)
