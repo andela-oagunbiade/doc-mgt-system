@@ -58,25 +58,29 @@ class DocumentsController {
   static getDocument(request, response) {
     model.Document.findById(request.params.id)
       .then((foundDocument) => {
-        if (!foundDocument) return response.status(404)
-          .send({ message: `No document found with id: ${request.params.id}` });
+        if (!foundDocument)
+          return response.status(404)
+          .send({
+            message: `No document found with id: ${request.params.id}`
+          });
         // eslint-disable-next-line curly
-        if ((foundDocument.access === accessCategories.public) ||
-          (foundDocument.OwnerId === request.decoded.UserId)) {
+        if (foundDocument.access === accessCategories.public)
           return response.status(200)
             .send(foundDocument);
-        }
-
-        model.User.findById(foundDocument.OwnerId)
-          .then((documentOwner) => {
-            if (documentOwner.RoleId === request.decoded.RoleId)
-              return response.status(200)
-                .send(foundDocument);
-
-            response.status(403)
-              .send({
-                message: 'You are not permitted to access this document'
-              });
+        if ((foundDocument.access === accessCategories.private) &&
+          (foundDocument.OwnerId === request.decoded.UserId))
+          return response.status(200)
+            .send(foundDocument);
+        if (foundDocument.access === accessCategories.role)
+          return model.User.findById(foundDocument.OwnerId)
+            .then((documentOwner) => {
+              if (documentOwner.RoleId === request.decoded.RoleId)
+                return response.status(200)
+                  .send(foundDocument);
+            });
+        return response.status(403)
+          .send({
+            message: 'You are not permitted to access this document'
           });
       });
   }

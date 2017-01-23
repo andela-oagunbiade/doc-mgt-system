@@ -13,11 +13,11 @@ const regularUserParams = helper.testUser2;
 const regularUserParams2 = helper.testUser3;
 const publicDocumentParams = helper.testDocument;
 const privateDocumentParams = helper.testDocument2;
-const publicDocumentParams2 = helper.testDocument3;
+const documentParams = helper.testDocument3;
 
 describe('DOCUMENT API', () => {
-  let adminRole, regularRole, adminUser, publicToken, publicDocument,
-    privateUser, privateUser2, privateToken, privateToken2, privateDocument;
+  let adminRole, regularRole, adminUser, privateUser, privateUser2, publicToken,
+    privateToken, privateToken2, publicDocument, privateDocument, roleDocument;
 
   before((done) => {
     model.Role.bulkCreate([adminRoleParams, regularRoleParams], {
@@ -81,15 +81,15 @@ describe('DOCUMENT API', () => {
 
     describe('POST: (/documents) - CREATE A DOCUMENT', () => {
       it('should create a document for a validated user', (done) => {
-        publicDocumentParams2.OwnerId = adminUser.id;
+        documentParams.OwnerId = adminUser.id;
         request.post('/documents')
           .set({ Authorization: publicToken })
-          .send(publicDocumentParams2)
+          .send(documentParams)
           .end((error, response) => {
             expect(response.status).to.equal(201);
-            expect(response.body.title).to.equal(publicDocumentParams2.title);
+            expect(response.body.title).to.equal(documentParams.title);
             expect(response.body.content)
-              .to.equal(publicDocumentParams2.content);
+              .to.equal(documentParams.content);
             done();
           });
       });
@@ -203,7 +203,7 @@ describe('DOCUMENT API', () => {
       });
     });
 
-    describe('Requests for Private Documents', () => {
+    describe('Requests for Documents with Access set to Private', () => {
       describe('GET: (/documents/:id - GET A DOCUMENT)', () => {
         beforeEach((done) => {
           privateDocumentParams.OwnerId = privateUser.id;
@@ -214,32 +214,56 @@ describe('DOCUMENT API', () => {
               done();
             });
         });
-        it('should not return document when user is not the owner', (done) => {
+        it('should NOT return document when user is not the owner', (done) => {
           request.get(`/documents/${privateDocument.id}`)
             .set({ Authorization: publicToken })
             .expect(403, done);
         });
-        it('should return the document when the user is the owner', (done) => {
-          request.get(`/documents/${privateDocument.id}`)
-            .set({ Authorization: privateToken })
-            .end((error, response) => {
-              expect(response.status).to.equal(200);
-              expect(response.body.title).to.equal(privateDocumentParams.title);
-              expect(response.body.content).to.equal(privateDocumentParams.content);
-              done();
-            });
-        });
-        it('should return the document when user has same role as owner',
+        it('should NOT return document even when user has same role as owner',
           (done) => {
             request.get(`/documents/${privateDocument.id}`)
               .set({ Authorization: privateToken2 })
+              .expect(403, done);
+          });
+        it('should ONLY return the document when the user is the owner',
+          (done) => {
+            request.get(`/documents/${privateDocument.id}`)
+              .set({ Authorization: privateToken })
               .end((error, response) => {
                 expect(response.status).to.equal(200);
-                expect(response.body.title).to.equal(privateDocumentParams.title);
-                expect(response.body.content).to.equal(privateDocumentParams.content);
+                expect(response.body.title)
+                  .to.equal(privateDocumentParams.title);
+                expect(response.body.content)
+                  .to.equal(privateDocumentParams.content);
                 done();
               });
           });
+      });
+    });
+
+    describe('Requests for Documents with Access set to Role', () => {
+      describe('GET: (/documents/:id - GET A DOCUMENT)', () => {
+        beforeEach((done) => {
+          documentParams.OwnerId = privateUser2.id;
+          documentParams.access = 'role';
+
+          model.Document.create(documentParams)
+            .then((createdDocument) => {
+              roleDocument = createdDocument;
+              done();
+            });
+        });
+
+        it('should ONLY return when user has same role as owner', (done) => {
+          request.get(`/documents/${roleDocument.id}`)
+            .set({ Authorization: privateToken })
+            .end((errors, response) => {
+              expect(response.status).to.equal(200);
+              expect(response.body.title).to.equal(documentParams.title);
+              expect(response.body.content).to.equal(documentParams.content);
+              done();
+            });
+        });
       });
     });
   });
