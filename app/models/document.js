@@ -8,7 +8,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.TEXT
     },
-    OwnerId: DataTypes.INTEGER,
+    OwnerId: {
+      allowNull: false,
+      type: DataTypes.INTEGER
+    },
     access: {
       defaultValue: 'public',
       type: DataTypes.STRING,
@@ -18,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     classMethods: {
-      associate: (models) => {
+      associate(models) {
         // associations can be defined here
         Document.belongsTo(models.User, {
           as: 'Owner',
