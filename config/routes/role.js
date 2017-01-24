@@ -9,6 +9,7 @@ router.route('/')
   .post(rolesController.createRole);
 
 router.route('/:id')
+  .all(auth.verifyToken, auth.adminAccess)
   .get(rolesController.getRole)
   .put(rolesController.updateRole)
   .delete(rolesController.deleteRole);
