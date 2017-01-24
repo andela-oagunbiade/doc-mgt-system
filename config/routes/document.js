@@ -15,4 +15,7 @@ router.route('/:id')
   .put(documentsController.updateDocument)
   .delete(documentsController.deleteDocument);
 
+router.route('/search')
+  .post(auth.verifyToken, documentsController.search);
+
 module.exports = router;

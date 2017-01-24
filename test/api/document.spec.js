@@ -14,6 +14,10 @@ const regularUserParams2 = helper.testUser3;
 const publicDocumentParams = helper.testDocument;
 const privateDocumentParams = helper.testDocument2;
 const documentParams = helper.testDocument3;
+const documentsCollection = helper.documentsCollection();
+
+const compareDate = (dateA, dateB) =>
+  new Date(dateA).getTime() <= new Date(dateB).getTime();
 
 describe('DOCUMENT API', () => {
   let adminRole, regularRole, adminUser, privateUser, privateUser2, publicToken,
@@ -91,13 +95,14 @@ describe('DOCUMENT API', () => {
             done();
           });
       });
-      it('should not create a document without all required fields', (done) => {
-        const invalidDocument = { title: 'I have no content' };
-        request.post('/documents')
-          .set({ Authorization: publicToken })
-          .send(invalidDocument)
-          .expect(500, done);
-      });
+      it('should not create a document without all required fields',
+        (done) => {
+          const invalidDocument = { title: 'I have no content' };
+          request.post('/documents')
+            .set({ Authorization: publicToken })
+            .send(invalidDocument)
+            .expect(500, done);
+        });
     });
 
     describe('Requests for Documents', () => {
@@ -106,40 +111,45 @@ describe('DOCUMENT API', () => {
           request.get('/documents')
             .expect(401, done);
         });
-        it('should not return documents if invalid token is provided', (done) => {
-          request.get('/documents')
-            .set({ Authorization: 'ADRYDUIGUtrtrr6e' })
-            .expect(401, done);
-        });
-        it('should return all documents when valid token is provided', (done) => {
-          request.get('/documents')
-            .set({ Authorization: publicToken })
-            .end((error, response) => {
-              expect(response.status).to.equal(200);
-              expect(Array.isArray(response.body)).to.be.true;
-              expect(response.body.length).to.be.greaterThan(0);
-              expect(response.body[0].title).to.equal(publicDocumentParams.title);
-              done();
-            });
-        });
+        it('should not return documents if invalid token is provided',
+          (done) => {
+            request.get('/documents')
+              .set({ Authorization: 'ADRYDUIGUtrtrr6e' })
+              .expect(401, done);
+          });
+        it('should return all documents when valid token is provided',
+          (done) => {
+            request.get('/documents')
+              .set({ Authorization: publicToken })
+              .end((error, response) => {
+                expect(response.status).to.equal(200);
+                expect(Array.isArray(response.body)).to.be.true;
+                expect(response.body.length).to.be.greaterThan(0);
+                expect(response.body[0].title)
+                  .to.equal(publicDocumentParams.title);
+                done();
+              });
+          });
       });
 
       describe('GET: (/documents/:id) - GET A DOCUMENT', () => {
-        it('should not return a document if invalid id is provided', (done) => {
-          request.get('/documents/789')
-            .set({ Authorization: publicToken })
-            .expect(404, done);
-        });
-        it('should return the document when a valid id is provided', (done) => {
-          request.get(`/documents/${publicDocument.id}`)
-            .set({ Authorization: publicToken })
-            .end((error, response) => {
-              expect(response.status).to.equal(200);
-              expect(response.body.title).to.equal(publicDocument.title);
-              expect(response.body.content).to.equal(publicDocument.content);
-              done();
-            });
-        });
+        it('should not return a document if invalid id is provided',
+          (done) => {
+            request.get('/documents/789')
+              .set({ Authorization: publicToken })
+              .expect(404, done);
+          });
+        it('should return the document when a valid id is provided',
+          (done) => {
+            request.get(`/documents/${publicDocument.id}`)
+              .set({ Authorization: publicToken })
+              .end((error, response) => {
+                expect(response.status).to.equal(200);
+                expect(response.body.title).to.equal(publicDocument.title);
+                expect(response.body.content).to.equal(publicDocument.content);
+                done();
+              });
+          });
       });
 
       describe('PUT: (/documents/:id) - EDIT A DOCUMENT', () => {
@@ -157,32 +167,35 @@ describe('DOCUMENT API', () => {
             .send(fieldToUpdate)
             .expect(403, done);
         });
-        it('should correctly edit document if valid id is provided', (done) => {
-          const fieldToUpdate = { content: 'replace previous document' };
-          request.put(`/documents/${publicDocument.id}`)
-            .set({ Authorization: publicToken })
-            .send(fieldToUpdate)
-            .end((error, response) => {
-              expect(response.status).to.equal(200);
-              expect(response.body.content).to.equal(fieldToUpdate.content);
-              done();
-            });
-        });
+        it('should correctly edit document if valid id is provided',
+          (done) => {
+            const fieldToUpdate = { content: 'replace previous document' };
+            request.put(`/documents/${publicDocument.id}`)
+              .set({ Authorization: publicToken })
+              .send(fieldToUpdate)
+              .end((error, response) => {
+                expect(response.status).to.equal(200);
+                expect(response.body.content).to.equal(fieldToUpdate.content);
+                done();
+              });
+          });
       });
 
       describe('DELETE: (/documents/:id) - DELETE A DOCUMENT', () => {
-        it('should not perform delete if an invalid id is provided', (done) => {
-          request.delete('/documents/789')
-            .set({ Authorization: publicToken })
-            .expect(404, done);
-        });
-        it('should not perform delete if User is not document Owner', (done) => {
-          const fieldToUpdate = { content: 'replace previous document' };
-          request.delete(`/documents/${publicDocument.id}`)
-            .set({ Authorization: privateToken })
-            .send(fieldToUpdate)
-            .expect(403, done);
-        });
+        it('should not perform delete if an invalid id is provided',
+          (done) => {
+            request.delete('/documents/789')
+              .set({ Authorization: publicToken })
+              .expect(404, done);
+          });
+        it('should not perform delete if User is not document Owner',
+          (done) => {
+            const fieldToUpdate = { content: 'replace previous document' };
+            request.delete(`/documents/${publicDocument.id}`)
+              .set({ Authorization: privateToken })
+              .send(fieldToUpdate)
+              .expect(403, done);
+          });
         it('should succesfully delete when provided a valid Id', (done) => {
           request.delete(`/documents/${publicDocument.id}`)
             .set({ Authorization: publicToken })
@@ -264,6 +277,105 @@ describe('DOCUMENT API', () => {
             });
         });
       });
+    });
+  });
+
+  describe('Requests to get multiple Documents', () => {
+    before(() => model.Document.bulkCreate(documentsCollection));
+
+    describe('Document Pagination', () => {
+      it('allows use of query params "limit" to limit the result', (done) => {
+        request.get('/documents?limit=7')
+          .set({ Authorization: publicToken })
+          .end((error, response) => {
+            expect(response.status).to.equal(200);
+            expect(response.body.length).to.equal(7);
+            done();
+          });
+      });
+      it('returns the documents in order of their published dates', (done) => {
+        request.get('/documents?limit=7')
+          .set({ Authorization: publicToken })
+          .end((error, response) => {
+            const documents = response.body;
+
+            let flag = false;
+            for (let index = 0; index < documents.length - 1; index += 1) {
+              flag = compareDate(documents[index].createdAt,
+                documents[index + 1].createdAt);
+              if (!flag) break;
+            }
+            expect(flag).to.be.true;
+            done();
+          });
+      });
+    });
+
+    describe('Document Search', () => {
+      it('performs a search and returns the correct document', (done) => {
+        const query = documentsCollection[10].content.substr(5, 13);
+        const matcher = new RegExp(query);
+
+        request.post(`/documents/search?query=${query}`)
+          .set({ Authorization: publicToken })
+          .end((error, response) => {
+            expect(response.status).to.equal(200);
+            expect(matcher.test(response.body[0].content)).to.be.true;
+            done();
+          });
+      });
+
+      it('allows use of query params "limit" to determine the result number',
+        (done) => {
+          request.post('/documents/search?limit=4')
+            .set({ Authorization: publicToken })
+            .end((error, response) => {
+              expect(response.status).to.equal(200);
+              expect(response.body.length).to.equal(4);
+              done();
+            });
+        });
+
+      it('allows use of query params "role" to get documents by role',
+        (done) => {
+          request.post('/documents/search?role=1')
+            .set({ Authorization: publicToken })
+            .end((error, response) => {
+              expect(response.status).to.equal(200);
+              const query = {
+                where: { id: response.body[0].id },
+                include: [{
+                  model: model.User,
+                  as: 'Owner'
+                }]
+              };
+
+              model.Document.findAll(query)
+                .then((foundDocuments) => {
+                  expect(foundDocuments[0].Owner.RoleId).to.equal(1);
+                  done();
+                });
+            });
+        });
+
+      it('allows use of query params "publishedDate" to determine the order',
+        (done) => {
+          request.post('/documents?publishedDate=ASC')
+            .set({ Authorization: publicToken })
+            .end((error, response) => {
+              const foundDocuments = response.body;
+              let flag = true;
+
+              for (let index = 0; index < foundDocuments.length - 1;
+                index += 1) {
+                flag = compareDate(foundDocuments[index].createdAt,
+                  foundDocuments[index + 1].createdAt);
+                if (!flag) break;
+              }
+              expect(flag).to.be.false;
+              done();
+            });
+        });
     });
   });
 });
