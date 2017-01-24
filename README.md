@@ -2,6 +2,7 @@
 [![Code Climate](https://codeclimate.com/github/andela-oagunbiade/doc-mgt-system/badges/gpa.svg)](https://codeclimate.com/github/andela-oagunbiade/doc-mgt-system)
 [![Test Coverage](https://codeclimate.com/github/andela-oagunbiade/doc-mgt-system/badges/coverage.svg)](https://codeclimate.com/github/andela-oagunbiade/doc-mgt-system/coverage)
 [![Coverage Status](https://coveralls.io/repos/github/andela-oagunbiade/doc-mgt-system/badge.svg?branch=master)](https://coveralls.io/github/andela-oagunbiade/doc-mgt-system?branch=master)
+[![Issue Count](https://codeclimate.com/github/andela-oagunbiade/doc-mgt-system/badges/issue_count.svg)](https://codeclimate.com/github/andela-oagunbiade/doc-mgt-system)
 
 # doc-mgt-system
 The Document management system provides REST API enpoints for a document management system. It allows create, retrieve, update and delete actions to be carried out.
