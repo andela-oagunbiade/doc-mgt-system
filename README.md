@@ -59,7 +59,7 @@ Documents can be created and must have:
 Roles can also be created, the default roles are `admin` and `regular`
 
 **Authentication**:
-Users are authentcated and validated using JSON web token (JWT).
+Users are authenticated and validated using JSON web token (JWT).
 By generating a token on registration and login, API endpoints and documents are protected from unauthorised access.
 Requests to protected routes are validated using the generated token.
 
