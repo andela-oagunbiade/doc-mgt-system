@@ -35,7 +35,7 @@ module.exports = {
   },
 
   testDocument: {
-    title: faker.finance.accountName(),
+    title: faker.company.catchPhrase(),
     content: faker.lorem.paragraph()
   },
 
@@ -46,7 +46,7 @@ module.exports = {
   },
 
   testDocument3: {
-    title: faker.finance.accountName(),
+    title: faker.commerce.department(),
     content: faker.lorem.paragraph()
   },
 
@@ -55,7 +55,7 @@ module.exports = {
 
     for (let i = 0; i <= 15; i += 1) {
       documentsParams.push({
-        title: faker.finance.accountName(),
+        title: faker.company.catchPhrase(),
         content: faker.lorem.paragraph(),
         OwnerId: 1
       });

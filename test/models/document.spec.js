@@ -31,38 +31,45 @@ describe('Document Model', () => {
       document = model.Document.build(documentParams);
     });
 
+    afterEach(() => model.Document.destroy({ where: {} }));
+
     after(() => model.sequelize.sync({ force: true }));
 
-    it('should be able to create a document', () => {
+    it('should be able to create a document', (done) => {
       document.save()
         .then((createdDocument) => {
           expect(createdDocument).to.exist;
           expect(typeof createdDocument).to.equal('object');
+          done();
         });
     });
-    it('should create a document with title and content', () => {
+    it('should create a document with title and content', (done) => {
       document.save()
         .then((createdDocument) => {
           expect(createdDocument.title).to.equal(documentParams.title);
           expect(createdDocument.content).to.equal(documentParams.content);
+          done();
         });
     });
-    it('should create a document with correct OwnerId', () => {
+    it('should create a document with correct OwnerId', (done) => {
       document.save()
         .then((createdDocument) => {
           expect(createdDocument.OwnerId).to.equal(owner.id);
+          done();
         });
     });
-    it('should create a document with publish date', () => {
+    it('should create a document with publish date', (done) => {
       document.save()
       .then((createdDocument) => {
         expect(createdDocument.createdAt).to.exist;
+        done();
       });
     });
-    it('should create a document with access set to public', () => {
+    it('should create a document with access set to public', (done) => {
       document.save()
         .then((createdDocument) => {
           expect(createdDocument.access).to.equal('public');
+          done();
         });
     });
 
