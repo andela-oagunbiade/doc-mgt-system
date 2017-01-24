@@ -87,6 +87,10 @@ class DocumentsController {
                 return response.status(200)
                   .send(foundDocument);
               }
+              return response.status(403)
+                .send({
+                  message: 'You are not permitted to access this document'
+                });
             });
         }
         return response.status(403)
