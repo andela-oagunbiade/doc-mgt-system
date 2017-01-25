@@ -59,7 +59,7 @@ class UsersController {
       .then((foundUser) => {
         if (foundUser) {
           return response.status(409)
-            .send({ message: `Unable to create user. This mail:
+            .send({ message: `Unable to create user. This mail: \
               ${request.body.email} is already in use` });
         }
 
