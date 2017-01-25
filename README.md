@@ -23,7 +23,7 @@ This application was developed using [NodeJs](https://nodejs.org) with express f
 
 ## Usage
 - Start the app with `$ npm start`
-- Use [Postman](https://www.getpostman.com) to consume available endpoints
+- Use [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/47242a54bdfc7d55498f) to consume available endpoints
 
 **Users**:
 A created user will have a role, either an admin or a regular.
