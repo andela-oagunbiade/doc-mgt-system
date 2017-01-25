@@ -309,6 +309,11 @@ describe('DOCUMENT API', () => {
             done();
           });
       });
+      it('does NOT return documents if the limit is not valid', (done) => {
+        request.get('/documents?limit=-1')
+          .set({ Authorization: publicToken })
+          .expect(400, done);
+      });
     });
 
     describe('Document Search', () => {

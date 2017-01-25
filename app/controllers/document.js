@@ -37,6 +37,10 @@ class DocumentsController {
    * @return {Object} response Object
    */
   static getDocuments(request, response) {
+    if (request.query.limit < 0) {
+      return response.status(400)
+      .send({ message: 'Limit must be a positive integer' });
+    }
     const query = {
       where: {
         $or: [
