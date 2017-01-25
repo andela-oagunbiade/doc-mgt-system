@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const rolesController = require('../../app/controllers/role');
-const auth = require('../../app/controllers/authentication');
+const auth = require('../../app/middlewares/authentication');
 
 router.route('/')
   .all(auth.verifyToken, auth.adminAccess)

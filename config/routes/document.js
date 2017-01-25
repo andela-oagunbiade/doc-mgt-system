@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const documentsController = require('../../app/controllers/document');
-const auth = require('../../app/controllers/authentication');
+const auth = require('../../app/middlewares/authentication');
 
 
 router.route('/')

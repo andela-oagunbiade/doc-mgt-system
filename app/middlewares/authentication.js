@@ -30,7 +30,7 @@ const Auth = {
           next();
         } else {
           return response.status(403)
-            .send({ message: 'You are not an Admin' });
+            .send({ message: 'User is unauthorized for this request.' });
         }
       });
   }
