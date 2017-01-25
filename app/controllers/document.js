@@ -37,9 +37,9 @@ class DocumentsController {
    * @return {Object} response Object
    */
   static getDocuments(request, response) {
-    if (request.query.limit < 0) {
+    if (request.query.limit < 0 || request.query.offset < 0) {
       return response.status(400)
-      .send({ message: 'Limit must be a positive integer' });
+      .send({ message: 'Only Positive integers are permitted.' });
     }
     const query = {
       where: {
@@ -183,6 +183,10 @@ class DocumentsController {
    * @returns {Object} response object
    */
   static search(request, response) {
+    if (request.query.limit < 0 || request.query.offset < 0) {
+      return response.status(400)
+      .send({ message: 'Only Positive integers are permitted.' });
+    }
     const queryString = request.query.query;
     const role = Math.abs(request.query.role, 10);
     const publishedDate = request.query.publishedDate;

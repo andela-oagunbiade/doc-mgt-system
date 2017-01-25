@@ -293,6 +293,15 @@ describe('DOCUMENT API', () => {
             done();
           });
       });
+      it('allows use of query params "offset" to create a range', (done) => {
+        request.get('/documents?offset=7')
+          .set({ Authorization: publicToken })
+          .end((error, response) => {
+            expect(response.status).to.equal(200);
+            expect(response.body.length).to.equal(9);
+            done();
+          });
+      });
       it('returns the documents in order of their published dates', (done) => {
         request.get('/documents?limit=7')
           .set({ Authorization: publicToken })
@@ -311,6 +320,11 @@ describe('DOCUMENT API', () => {
       });
       it('does NOT return documents if the limit is not valid', (done) => {
         request.get('/documents?limit=-1')
+          .set({ Authorization: publicToken })
+          .expect(400, done);
+      });
+      it('does NOT return documents if the offset is not valid', (done) => {
+        request.get('/documents?offset=-2')
           .set({ Authorization: publicToken })
           .expect(400, done);
       });
@@ -340,7 +354,15 @@ describe('DOCUMENT API', () => {
               done();
             });
         });
-
+      it('allows use of query params "offset" to create a range', (done) => {
+        request.post('/documents/search?offset=7')
+          .set({ Authorization: publicToken })
+          .end((error, response) => {
+            expect(response.status).to.equal(200);
+            expect(response.body.length).to.equal(9);
+            done();
+          });
+      });
       it('allows use of query params "role" to get documents by role',
         (done) => {
           request.post('/documents/search?role=1')
@@ -381,6 +403,16 @@ describe('DOCUMENT API', () => {
               done();
             });
         });
+      it('does NOT return documents if the limit is not valid', (done) => {
+        request.post('/documents/search?limit=-1')
+          .set({ Authorization: publicToken })
+          .expect(400, done);
+      });
+      it('does NOT return documents if the offset is not valid', (done) => {
+        request.post('/documents/search?offset=-2')
+          .set({ Authorization: publicToken })
+          .expect(400, done);
+      });
     });
   });
 });
