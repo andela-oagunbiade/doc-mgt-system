@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const usersController = require('../../app/controllers/user');
 const documentsController = require('../../app/controllers/document');
-const auth = require('../../app/controllers/authentication');
+const auth = require('../../app/middlewares/authentication');
 
 router.route('/')
   .get(auth.verifyToken, auth.adminAccess, usersController.getUsers)

@@ -10,9 +10,7 @@ const config = require('../../config/config.json')[env];
 
 const db = {};
 
-const sequelize = (process.env.NODE_ENV === 'production') ?
-  new Sequelize(process.env.DATABASE_URL) :
-  new Sequelize(process.env.DB_NAME, process.env.DB_USERNAME, process.env.DB_PASSWORD, config);
+const sequelize = new Sequelize(process.env[config.use_env_variable], config);
 
 
 fs
@@ -27,8 +25,9 @@ fs
   });
 
 Object.keys(db).forEach((modelName) => {
-  if (db[modelName].associate)
+  if (db[modelName].associate) {
     db[modelName].associate(db);
+  }
 });
 
 db.sequelize = sequelize;

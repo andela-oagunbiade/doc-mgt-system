@@ -2,7 +2,8 @@ const model = require('../models');
 
 const accessCategories = {
   public: 'public',
-  private: 'private'
+  private: 'private',
+  role: 'role'
 };
 
 /**
@@ -24,7 +25,7 @@ class DocumentsController {
           .send(newDocument);
       })
       .catch((error) => {
-        return response.status(400)
+        return response.status(500)
           .send(error.errors);
       });
   }
@@ -36,9 +37,20 @@ class DocumentsController {
    * @return {Object} response Object
    */
   static getDocuments(request, response) {
+    if (request.query.limit < 0 || request.query.offset < 0) {
+      return response.status(400)
+      .send({ message: 'Only Positive integers are permitted.' });
+    }
     const query = {
+      where: {
+        $or: [
+          { access: 'public' },
+          { OwnerId: request.decoded.UserId }
+        ]
+      },
       limit: request.query.limit || null,
-      offset: request.query.offset || null
+      offset: request.query.offset || null,
+      order: [['createdAt', 'DESC']]
     };
 
     model.Document.findAll(query)
@@ -57,16 +69,38 @@ class DocumentsController {
   static getDocument(request, response) {
     model.Document.findById(request.params.id)
       .then((foundDocument) => {
-        if (!foundDocument) return response.status(404)
-          .send({ message: `No document found with id: ${request.params.id}` });
-        // eslint-disable-next-line curly
-        if ((foundDocument.access === accessCategories.public) ||
+        if (!foundDocument) {
+          return response.status(404)
+          .send({
+            message: `No document found with id: ${request.params.id}`
+          });
+        }
+        if (foundDocument.access === accessCategories.public) {
+          return response.status(200)
+            .send(foundDocument);
+        }
+        if ((foundDocument.access === accessCategories.private) &&
           (foundDocument.OwnerId === request.decoded.UserId)) {
           return response.status(200)
             .send(foundDocument);
         }
+        if (foundDocument.access === accessCategories.role) {
+          return model.User.findById(foundDocument.OwnerId)
+            .then((documentOwner) => {
+              if (documentOwner.RoleId === request.decoded.RoleId) {
+                return response.status(200)
+                  .send(foundDocument);
+              }
+              return response.status(403)
+                .send({
+                  message: 'You are not permitted to access this document'
+                });
+            });
+        }
         return response.status(403)
-          .send({ message: 'YOu are not permitted to access this document' });
+          .send({
+            message: 'You are not permitted to access this document'
+          });
       });
   }
 
@@ -79,8 +113,11 @@ class DocumentsController {
   static getUserDocuments(request, response) {
     model.Document.findAll({ where: { OwnerId: request.params.id } })
       .then((foundDocuments) => {
-        if (!foundDocuments) return response.status(404)
-          .send({ message: `No document found with id: ${request.params.id}` });
+        if (!foundDocuments) {
+          return response.status(404)
+            .send({ message: `No document found for user with id:\
+              ${request.params.id}` });
+        }
         return response.status(200)
           .send(foundDocuments);
       });
@@ -95,14 +132,20 @@ class DocumentsController {
   static updateDocument(request, response) {
     model.Document.findById(request.params.id)
       .then((foundDocument) => {
-        if (!foundDocument) return response.status(404)
+        if (!foundDocument) {
+          return response.status(404)
           .send({ message: `No document found with id: ${request.params.id}` });
-
-        foundDocument.update(request.body)
-          .then((updatedDocument) => {
-            return response.status(202)
-              .send(updatedDocument);
-          });
+        }
+        if (foundDocument.OwnerId === request.decoded.UserId) {
+          foundDocument.update(request.body)
+            .then((updatedDocument) => {
+              return response.status(200)
+                .send(updatedDocument);
+            });
+        } else {
+          return response.status(403)
+            .send({ message: 'You are not the Owner of this document.' });
+        }
       });
   }
 
@@ -115,14 +158,76 @@ class DocumentsController {
   static deleteDocument(request, response) {
     model.Document.findById(request.params.id)
       .then((foundDocument) => {
-        if (!foundDocument) return response.status(404)
+        if (!foundDocument) {
+          return response.status(404)
           .send({ message: `No document found with id: ${request.params.id}` });
+        }
+        if (foundDocument.OwnerId === request.decoded.UserId) {
+          foundDocument.destroy()
+            .then(() => {
+              return response.status(200)
+                .send({ message: 'Document successfully deleted' });
+            });
+        } else {
+          return response.status(403)
+            .send({ message: 'You are not the Owner of this document.' });
+        }
+      });
+  }
 
-        foundDocument.destroy()
-          .then(() => {
-            return response.status(202)
-              .send({ message: 'Document succesfully deleted' });
-          });
+  /**
+   * Get all documents that belongs to a user
+   * Route: GET: /search?query={}&published={}&role=1
+   * @param {Object} request - request object
+   * @param {Object} response - response object
+   * @returns {Object} response object
+   */
+  static search(request, response) {
+    if (request.query.limit < 0 || request.query.offset < 0) {
+      return response.status(400)
+      .send({ message: 'Only Positive integers are permitted.' });
+    }
+    const queryString = request.query.query;
+    const role = Math.abs(request.query.role, 10);
+    const publishedDate = request.query.publishedDate;
+    const order = publishedDate && /^ASC$/i.test(publishedDate)
+            ? publishedDate : 'DESC';
+
+    const query = {
+      where: {
+        $and: [{ $or: [
+          { access: 'public' },
+          { OwnerId: request.decoded.UserId }
+        ] }],
+      },
+      limit: request.query.limit || null,
+      offset: request.query.offset || null,
+      order: [['createdAt', order]]
+    };
+
+    if (queryString) {
+      query.where.$and.push({ $or: [
+        { title: { $like: `%${queryString}%` } },
+        { content: { $like: `%${queryString}%` } }
+      ] });
+    }
+
+    if (role) {
+      query.include = [{
+        model: model.User,
+        as: 'Owner',
+        attributes: [],
+        include: [{
+          model: model.Role,
+          attributes: [],
+          where: { id: role }
+        }]
+      }];
+    }
+
+    model.Document.findAll(query)
+      .then((documents) => {
+        response.send(documents);
       });
   }
 }

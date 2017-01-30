@@ -1,16 +1,21 @@
 const router = require('express').Router();
 
 const documentsController = require('../../app/controllers/document');
-const auth = require('../../app/controllers/authentication');
+const auth = require('../../app/middlewares/authentication');
 
 
 router.route('/')
-  .get(auth.verifyToken, documentsController.getDocuments)
-  .post(auth.verifyToken, documentsController.createDocument);
+  .all(auth.verifyToken)
+  .get(documentsController.getDocuments)
+  .post(documentsController.createDocument);
 
 router.route('/:id')
-  .get(auth.verifyToken, documentsController.getDocument)
-  .put(auth.verifyToken, documentsController.updateDocument)
-  .delete(auth.verifyToken, documentsController.deleteDocument);
+  .all(auth.verifyToken)
+  .get(documentsController.getDocument)
+  .put(documentsController.updateDocument)
+  .delete(documentsController.deleteDocument);
+
+router.route('/search')
+  .post(auth.verifyToken, documentsController.search);
 
 module.exports = router;

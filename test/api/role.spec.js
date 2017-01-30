@@ -35,13 +35,9 @@ describe('Role API', () => {
       });
   });
 
-  afterEach(() => {
-    return model.Role.destroy({ where: { id: role.id } });
-  });
+  afterEach(() => model.Role.destroy({ where: { id: role.id } }));
 
-  after(() => {
-    return model.sequelize.sync({ force: true });
-  });
+  after(() => model.sequelize.sync({ force: true }));
 
   describe('REQUESTS', () => {
     describe('POST: (/roles) - CREATE ROLE', () => {
@@ -109,7 +105,7 @@ describe('Role API', () => {
     describe('PUT: (/roles/:id) - EDIT ROLE', () => {
       it('should not perform edit if wrong id is supplied', (done) => {
         const fieldsToUpdate = { title: 'super Admin' };
-        request.put('/roles/45')
+        request.put('/roles/999999')
           .set({ Authorization: token })
           .send(fieldsToUpdate)
           .expect(404, done);
@@ -120,7 +116,7 @@ describe('Role API', () => {
           .set({ Authorization: token })
           .send(fieldsToUpdate)
           .end((error, response) => {
-            expect(response.status).to.equal(202);
+            expect(response.status).to.equal(200);
             expect(response.body.title).to.equal(fieldsToUpdate.title);
             done();
           });
@@ -129,7 +125,7 @@ describe('Role API', () => {
 
     describe('DELETE: (/roles/:id) - DELETE ROLE', () => {
       it('should not perform delete action if wrong id is supplied', (done) => {
-        request.delete('/roles/45')
+        request.delete('/roles/999999')
           .set({ Authorization: token })
           .expect(404, done);
       });
@@ -137,7 +133,7 @@ describe('Role API', () => {
         request.delete(`/roles/${role.id}`)
           .set({ Authorization: token })
           .end((error, response) => {
-            expect(response.status).to.equal(202);
+            expect(response.status).to.equal(200);
             expect(response.body.message).to.equal('Succesfully deleted role');
             done();
           });

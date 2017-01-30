@@ -4,27 +4,36 @@ const expect = require('chai').expect;
 const model = require('../../app/models');
 const helper = require('../testHelper');
 
-const userParams = helper.testUser;
-const roleParams = helper.testRole;
+const adminUserParams = helper.testUser;
+const regularUserParams = helper.testUser2;
+const adminRoleParams = helper.testRole;
+const regularRoleParams = helper.testRole2;
 
 describe('User Authentication', () => {
-  let token;
-  beforeEach((done) => {
-    model.Role.create(roleParams)
-      .then((createdRole) => {
-        userParams.RoleId = createdRole.id;
-        return model.User.create(userParams);
-      })
-      .then(() => {
-        request.post('/users/login')
-          .send(userParams)
+  let adminToken, adminRole, regularRole, regularToken;
+  before((done) => {
+    model.Role.bulkCreate([adminRoleParams, regularRoleParams], {
+      returning: true })
+      .then((createdRoles) => {
+        adminRole = createdRoles[0];
+        regularRole = createdRoles[1];
+        adminUserParams.RoleId = adminRole.id;
+        regularUserParams.RoleId = regularRole.id;
+
+        request.post('/users')
+          .send(adminUserParams)
           .end((error, response) => {
-            token = response.body.token;
-            done();
+            adminToken = response.body.token;
+            request.post('/users')
+              .send(regularUserParams)
+              .end((err, res) => {
+                regularToken = res.body.token;
+                done();
+              });
           });
       });
   });
-  afterEach(() => {
+  after(() => {
     return model.sequelize.sync({ force: true });
   });
 
@@ -43,14 +52,20 @@ describe('User Authentication', () => {
         done();
       });
   });
+  it('should not return users if the user is not admin', (done) => {
+    request.get('/users')
+      .set({ Authorization: regularToken })
+      .expect(403, done);
+  });
   it('should correctly return all users with valid token and access', (done) => {
     request.get('/users')
-      .set({ Authorization: token })
+      .set({ Authorization: adminToken })
       .end((error, response) => {
-        expect(response.status).to.equal(202);
+        expect(response.status).to.equal(200);
         // eslint-disable-next-line no-unused-expressions
         expect(Array.isArray(response.body)).to.be.true;
         expect(response.body.length).to.be.greaterThan(0);
+        expect(response.body[0].userName).to.equal(adminUserParams.userName);
         done();
       });
   });

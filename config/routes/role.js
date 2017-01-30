@@ -1,15 +1,17 @@
 const router = require('express').Router();
 
 const rolesController = require('../../app/controllers/role');
-const auth = require('../../app/controllers/authentication');
+const auth = require('../../app/middlewares/authentication');
 
 router.route('/')
-  .get(auth.verifyToken, auth.adminAccess, rolesController.getRoles)
-  .post(auth.verifyToken, auth.adminAccess, rolesController.createRole);
+  .all(auth.verifyToken, auth.adminAccess)
+  .get(rolesController.getRoles)
+  .post(rolesController.createRole);
 
 router.route('/:id')
-  .get(auth.verifyToken, auth.adminAccess, rolesController.getRole)
-  .put(auth.verifyToken, auth.adminAccess, rolesController.updateRole)
-  .delete(auth.verifyToken, auth.adminAccess, rolesController.deleteRole);
+  .all(auth.verifyToken, auth.adminAccess)
+  .get(rolesController.getRole)
+  .put(rolesController.updateRole)
+  .delete(rolesController.deleteRole);
 
 module.exports = router;

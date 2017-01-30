@@ -47,9 +47,10 @@ class RolesController {
   static getRole(request, response) {
     model.Role.findById(request.params.id)
       .then((role) => {
-        if (!role) return response.status(404)
+        if (!role) {
+          return response.status(404)
           .send({ message: `Ǹo role with id: ${request.params.role}` });
-
+        }
         return response.status(200)
           .send(role);
       });
@@ -64,12 +65,14 @@ class RolesController {
   static updateRole(request, response) {
     model.Role.findById(request.params.id)
       .then((role) => {
-        if (!role) return response.status(404)
+        if (!role) {
+          return response.status(404)
           .send({ message: `Ǹo role with id: ${request.params.role}` });
+        }
 
         role.update(request.body)
           .then((updatedRole) => {
-            return response.status(202)
+            return response.status(200)
               .send(updatedRole);
           });
       });
@@ -84,12 +87,14 @@ class RolesController {
   static deleteRole(request, response) {
     model.Role.findById(request.params.id)
       .then((role) => {
-        if (!role) return response.status(404)
+        if (!role) {
+          return response.status(404)
           .send({ message: `Ǹo role with id: ${request.params.role}` });
+        }
 
         role.destroy()
           .then(() => {
-            return response.status(202)
+            return response.status(200)
               .send({ message: 'Succesfully deleted role' });
           });
       });

@@ -14,19 +14,19 @@ const uniqueFields = ['userName', 'email'];
 describe('User Model', () => {
   describe('How User Model Works', () => {
     let user;
-    before(() => {
-      return model.Role.create(roleParams)
+    before((done) => {
+      model.Role.create(roleParams)
         .then((createdRole) => {
           userParams.RoleId = createdRole.id;
-          return model.User.create(userParams).then((createdUser) => {
-            user = createdUser;
-          });
+          return model.User.create(userParams);
+        })
+        .then((createdUser) => {
+          user = createdUser;
+          done();
         });
     });
 
-    after(() => {
-      return model.sequelize.sync({ force: true });
-    });
+    after(() => model.sequelize.sync({ force: true }));
 
     it('should be able to create a user', () => {
       expect(user).to.exist;
@@ -50,30 +50,30 @@ describe('User Model', () => {
         });
     });
 
-    it('should be able to update a user', () => {
-      return model.User.findById(user.id)
+    it('should be able to update a user', (done) => {
+      model.User.findById(user.id)
         .then((foundUser) => {
           return foundUser.update({ userName: 'mogims' });
         })
         .then((updatedUser) => {
           expect(updatedUser.userName).to.equal('mogims');
+          done();
         });
     });
   });
 
   describe('How User model does Validation', () => {
     let user;
-    beforeEach(() => {
-      return model.Role.create(roleParams)
+    beforeEach((done) => {
+      model.Role.create(roleParams)
         .then((role) => {
           userParams.RoleId = role.id;
           user = model.User.build(userParams);
+          done();
         });
     });
 
-    afterEach(() => {
-      return model.sequelize.sync({ force: true });
-    });
+    afterEach(() => model.sequelize.sync({ force: true }));
 
     describe('Required Fields', () => {
       requiredFields.forEach((field) => {

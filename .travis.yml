@@ -17,9 +17,3 @@ before_script:
 
 after_script:
   - node node_modules/codeclimate-test-reporter/bin/codeclimate < coverage/lcov.info
-  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
-
-addons:
-  - postgresql: "9.3"
-  - code_climate:
-        repo_token: 792078873c69a0364c8292f44cbb5e763356d53ae5aec9866a05088a5875d05b

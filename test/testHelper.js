@@ -1,3 +1,6 @@
+const faker = require('faker');
+
+
 module.exports = {
   testRole: {
     title: 'admin'
@@ -8,29 +11,56 @@ module.exports = {
   },
 
   testUser: {
-    userName: 'oredavids',
-    firstName: 'ore',
-    lastName: 'davids',
-    email: 'oredavids@gmail.com',
-    password: '123456'
+    userName: faker.internet.userName(),
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    email: faker.internet.email(),
+    password: faker.internet.password()
   },
 
   testUser2: {
-    userName: 'femi',
-    firstName: 'femi',
-    lastName: 'dotexe',
-    email: 'femidotexe@gmail.com',
-    password: '123456'
+    userName: faker.internet.userName(),
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    email: faker.internet.email(),
+    password: faker.internet.password()
+  },
+
+  testUser3: {
+    userName: faker.internet.userName(),
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    email: faker.internet.email(),
+    password: faker.internet.password()
   },
 
   testDocument: {
-    title: 'Test Document',
-    content: 'A Model represents a table in the database. Also called a factory.'
+    title: faker.company.catchPhrase(),
+    content: faker.lorem.paragraph()
   },
 
   testDocument2: {
-    title: 'Other Document',
-    content: 'Buildpacks are scripts that are run when your app is deployed.',
+    title: faker.finance.accountName(),
+    content: faker.lorem.paragraph(),
     access: 'private'
+  },
+
+  testDocument3: {
+    title: faker.commerce.department(),
+    content: faker.lorem.paragraph()
+  },
+
+  documentsCollection() {
+    const documentsParams = [];
+
+    for (let i = 0; i <= 15; i += 1) {
+      documentsParams.push({
+        title: faker.company.catchPhrase(),
+        content: faker.lorem.paragraph(),
+        OwnerId: 1
+      });
+    }
+
+    return documentsParams;
   }
 };
