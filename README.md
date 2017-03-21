@@ -18,6 +18,7 @@ This application was developed using [NodeJs](https://nodejs.org) with express f
 - Create a `.env` file in your root directory as described in `.env.sample` file
 
 ## Testing
+- Run DB migrate commmand with `npm run db:migrate`. You should however, first, prepend the `db:migrate` script in the package.json with your database URL string to have something like : `DB_URL=postgres://username:password@host:port/DB_NAME node_modules/.bin/sequelize db:migrate` else the migrations files will be imported into your default POSTGRES database.
 - Run Test `npm test`
 
 ## Usage
@@ -41,7 +42,7 @@ A created user will have a role, either an admin or a regular.
 
 - In addition to the general user functions, an admin user can:
     - View all users.
-    - View all created documents.
+    - View all created documents except documents with access set to private.
     - Delete any user.
     - Update any user's record.
     - Create a new role.
@@ -50,10 +51,9 @@ A created user will have a role, either an admin or a regular.
 
 **Documents**:
 Documents can be created and must have:
-- Published date
 - Title
 - Content
-- Access (`private, public or role`)
+- Access; set by default to public but can be any of `private, public or role`
 
 **Roles**:
 Roles can also be created, the default roles are `admin` and `regular`
