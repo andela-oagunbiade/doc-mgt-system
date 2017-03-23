@@ -18,10 +18,15 @@ This application was developed using [NodeJs](https://nodejs.org) with express f
 - Create a `.env` file in your root directory as described in `.env.sample` file
 
 ## Testing
-- Run DB migrate commmand with `npm run db:migrate`. You should however, first, prepend the `db:migrate` script in the package.json with your database URL string to have something like : `DB_URL=postgres://username:password@host:port/DB_NAME node_modules/.bin/sequelize db:migrate` else the migrations files will be imported into your default POSTGRES database.
+- Prepend the `db:migrate` & `db:seed` scripts in the package.json file with your database URL string (copy from your .env file) to have something like : `DB_URL=postgres://username:password@host:port/DB_NAME node_modules/.bin/sequelize db:migrate` else the migrations files will be imported into your default POSTGRES database.
+- Run DB migrate commmand with `npm run db:migrate`.
 - Run Test `npm test`
 
+``` I strongly suggest using separate DBs for testing and using the API ```
+
 ## Usage
+- Run DB migrate commmand with `npm run db:migrate`.
+- Run DB seeder command with `npm run db:seed` to seed required Admin and Regular roles into your DB.
 - Start the app with `$ npm start`
 - Use [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/47242a54bdfc7d55498f) to consume available endpoints
 
