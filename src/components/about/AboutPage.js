@@ -1,11 +1,14 @@
+/* eslint-disable require-jsdoc */
+/* eslint-disable class-methods-use-this */
+
 import React from 'react';
 
 class Aboutpage extends React.Component {
-  render () {
+  render() {
     return (
       <div className="Jumbotron">
-        <h1 About></h1>
-        <p> Document Management System by Oreoluwa Agunbiade</p>
+        <h1>About</h1>
+        <p> Document Management Application by Oreoluwa Agunbiade</p>
       </div>
     );
   }

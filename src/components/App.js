@@ -1,8 +1,10 @@
-import React, {PropTypes} from 'react';
+/* eslint-disable require-jsdoc */
+
+import React, { PropTypes } from 'react';
 import Header from './common/Header';
 
 class App extends React.Component {
-  render () {
+  render() {
     return (
       <div className="container-fluid">
         <Header />
