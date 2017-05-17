@@ -5,9 +5,10 @@
   "main": "server.js",
   "scripts": {
     "prestart": "babel-node ./tools/startMessage.js",
-    "start": "npm-run-all --parallel open:src lint:watch",
+    "start": "npm-run-all --parallel open:src",
     "open:src": "babel-node ./tools/srcServer.js",
     "lint": "eslint .",
+    "lint:watch": "npm run lint -- --watch",
     "test": "istanbul cover _mocha -- -R spec test/**/*.spec.js",
     "db:migrate": "node_modules/.bin/sequelize db:migrate",
     "db:seed": "node_modules/.bin/sequelize db:seed:all"
@@ -69,10 +70,6 @@
     "cross-env": "1.0.7",
     "css-loader": "0.23.1",
     "enzyme": "2.2.0",
-    "eslint": "2.9.0",
-    "eslint-plugin-import": "1.6.1",
-    "eslint-plugin-react": "5.0.1",
-    "eslint-watch": "2.1.11",
     "eventsource-polyfill": "0.9.6",
     "expect": "1.19.0",
     "extract-text-webpack-plugin": "1.0.1",
@@ -94,9 +91,11 @@
   },
   "devDependencies": {
     "codeclimate-test-reporter": "^0.4.0",
-    "eslint": "^3.10.1",
+    "eslint": ">=3.10.1",
     "eslint-config-airbnb-base": "^10.0.1",
-    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-import": ">=2.2.0",
+    "eslint-plugin-react": "^7.0.1",
+    "eslint-watch": ">=2.1.11",
     "istanbul": "^0.4.5",
     "mocha": "^3.1.2",
     "mocha-lcov-reporter": "^1.2.0"

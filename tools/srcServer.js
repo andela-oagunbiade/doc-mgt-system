@@ -1,12 +1,14 @@
+import 'colors';
 import express from 'express';
 import webpack from 'webpack';
 import path from 'path';
 import config from '../webpack.config';
 import open from 'open';
+import dotenv from 'dotenv';
+dotenv.config();
 
 /* eslint-disable no-console */
-
-const port = 3000;
+const port = process.env.PORT || 3000;
 const app = express();
 const compiler = webpack(config);
 
@@ -23,8 +25,9 @@ app.get('*', function(req, res) {
 
 app.listen(port, function(err) {
   if (err) {
-    console.log(err);
+    console.log(`${err}`.red);
   } else {
-    open(`http://localhost:${port}`);
+    console.log(`Serving Client app on Port ${port}`.green);
+    setTimeout(() => open(`http://localhost:${port}`), 1000);
   }
 });
