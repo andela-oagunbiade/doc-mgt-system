@@ -6,6 +6,7 @@ import parser from 'body-parser';
 import webpack from 'webpack';
 import open from 'open';
 import dotenv from 'dotenv';
+import path from 'path';
 import config from '../webpack.config';
 import homeRoute from '../config/routes/index';
 import docRoutes from '../config/routes/document';
@@ -17,6 +18,7 @@ dotenv.config();
 const port = process.env.PORT || 3000;
 const app = express();
 const compiler = webpack(config);
+const apiRoute = '/api/v1';
 
 app.use(require('webpack-dev-middleware')(compiler, {
   noInfo: true,
@@ -28,19 +30,24 @@ app.use(require('webpack-hot-middleware')(compiler));
 app.use(parser.urlencoded({ extended: true }));
 app.use(parser.json());
 
-app.use('/', homeRoute);
-app.use('/documents', docRoutes);
-app.use('/users', userRoutes);
-app.use('/roles', roleRoutes);
+app.use(apiRoute, homeRoute);
+app.use(`${apiRoute}/documents`, docRoutes);
+app.use(`${apiRoute}/users`, userRoutes);
+app.use(`${apiRoute}/roles`, roleRoutes);
 
 // This returns an error page for undefined routes
-app.use((request, response) => {
+app.use(apiRoute, (request, response) => {
   return response
     .status(404)
     .send({
-      error: 'Requested route does not exist yet. Check back later.'
+      error: 'Requested route does not exist.'
     });
 });
+
+app.use('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../src/index.html'));
+});
+
 
 app.listen(port, (err) => {
   if (err) {
