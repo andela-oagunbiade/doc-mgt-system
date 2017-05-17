@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions */
 
-const app = require('../../server');
+const app = require('../../testServer');
 const request = require('supertest')(app);
 const expect = require('chai').expect;
 const model = require('../../app/models');
