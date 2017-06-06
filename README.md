@@ -18,8 +18,8 @@ This application was developed using [NodeJs](https://nodejs.org) with express f
 - Create a `.env` file in your root directory as described in `.env.sample` file
 
 ## Testing
-- Prepend the `db:migrate` & `db:seed` scripts in the package.json file with your database URL string (copy from your .env file) to have something like : `DB_URL=postgres://username:password@host:port/DB_NAME node_modules/.bin/sequelize db:migrate` else the migrations files will be imported into your default POSTGRES database.
-- Run DB migrate commmand with `npm run db:migrate`.
+- Set the TEST_DATABASE_URL in your environment
+- Run DB migrate commmand with `npm run test:db:migrate`.
 - Run Test `npm test`
 
 ``` I strongly suggest using separate DBs for testing and using the API ```
