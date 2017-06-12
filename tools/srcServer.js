@@ -35,7 +35,7 @@ app.use(`${apiRoute}/documents`, docRoutes);
 app.use(`${apiRoute}/users`, userRoutes);
 app.use(`${apiRoute}/roles`, roleRoutes);
 
-// This returns an error page for undefined routes
+// This returns an error page for undefined api routes
 app.use(apiRoute, (request, response) => {
   return response
     .status(404)
