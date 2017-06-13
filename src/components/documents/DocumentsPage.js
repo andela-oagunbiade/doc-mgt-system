@@ -2,6 +2,8 @@
 /* eslint-disable class-methods-use-this */
 
 import React from 'react';
+import { connect } from 'react-redux';
+import * as documentActions from '../../actions/documentsActions';
 
 class DocumentsPage extends React.Component {
   constructor(props, context) {
@@ -23,7 +25,7 @@ class DocumentsPage extends React.Component {
   }
 
   onTitleChange(event) {
-    const { document } = this.state;
+    const document = Object.assign({}, this.state.document);
     document.title = event.target.value;
     this.setState({
       document
@@ -31,22 +33,33 @@ class DocumentsPage extends React.Component {
   }
 
   onContentChange(event) {
-    const { document } = this.state;
+    const document = Object.assign({}, this.state.document);
     document.content = event.target.value;
     this.setState({
       document
     });
-    console.log('This is state', this.state);
   }
 
   onClickSave(event) {
-     alert(`Saving ${this.state.course} changes`);
+    this.props.dispatch(documentActions.createDocument(this.state.document));
+  }
+
+  documentRow(document, index) {
+    return (
+      <div>
+        <div key={index}>
+          <p>Title: {document.title}</p>
+          <p>Content: {document.content}</p>
+        </div>
+      </div>
+    );
   }
 
   render() {
     return (
       <div className="Jumbotron">
         <h1>Documents Page</h1>
+        {this.props.documents.map(this.documentRow)}
         <h2> Add Document </h2>
         <input
           type="text"
@@ -68,4 +81,17 @@ class DocumentsPage extends React.Component {
   }
 }
 
-export default DocumentsPage;
+const { PropTypes } = React;
+
+DocumentsPage.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  documents: PropTypes.array.isRequired
+};
+
+function mapStateToProps(state, ownprops) {
+  return {
+    documents: state.documents
+  };
+}
+
+export default connect(mapStateToProps)(DocumentsPage);
