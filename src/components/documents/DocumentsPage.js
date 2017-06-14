@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import * as documentActions from '../../actions/documentsActions';
 
 class DocumentsPage extends React.Component {
@@ -41,13 +42,13 @@ class DocumentsPage extends React.Component {
   }
 
   onClickSave(event) {
-    this.props.dispatch(documentActions.createDocument(this.state.document));
+    this.props.actions.createDocument(this.state.document);
   }
 
   documentRow(document, index) {
     return (
-      <div>
-        <div key={index}>
+      <div key={index}>
+        <div>
           <p>Title: {document.title}</p>
           <p>Content: {document.content}</p>
         </div>
@@ -84,8 +85,8 @@ class DocumentsPage extends React.Component {
 const { PropTypes } = React;
 
 DocumentsPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  documents: PropTypes.array.isRequired
+  documents: PropTypes.array.isRequired,
+  actions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownprops) {
@@ -94,4 +95,10 @@ function mapStateToProps(state, ownprops) {
   };
 }
 
-export default connect(mapStateToProps)(DocumentsPage);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(documentActions, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentsPage);
