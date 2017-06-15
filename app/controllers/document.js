@@ -11,7 +11,6 @@ const accessCategories = {
  * To handle routing logic for documents route
  */
 class DocumentsController {
-
   /**
    * Method createDocument
    * @param {Object} request - request Object
@@ -39,7 +38,7 @@ class DocumentsController {
   static getDocuments(request, response) {
     if (request.query.limit < 0 || request.query.offset < 0) {
       return response.status(400)
-      .send({ message: 'Only Positive integers are permitted.' });
+        .send({ message: 'Only Positive integers are permitted.' });
     }
     const query = {
       where: {
@@ -71,9 +70,9 @@ class DocumentsController {
       .then((foundDocument) => {
         if (!foundDocument) {
           return response.status(404)
-          .send({
-            message: `No document found with id: ${request.params.id}`
-          });
+            .send({
+              message: `No document found with id: ${request.params.id}`
+            });
         }
         if (foundDocument.access === accessCategories.public) {
           return response.status(200)
@@ -134,7 +133,7 @@ class DocumentsController {
       .then((foundDocument) => {
         if (!foundDocument) {
           return response.status(404)
-          .send({ message: `No document found with id: ${request.params.id}` });
+            .send({ message: `No document found with id: ${request.params.id}` });
         }
         if (foundDocument.OwnerId === request.decoded.UserId) {
           foundDocument.update(request.body)
@@ -160,7 +159,7 @@ class DocumentsController {
       .then((foundDocument) => {
         if (!foundDocument) {
           return response.status(404)
-          .send({ message: `No document found with id: ${request.params.id}` });
+            .send({ message: `No document found with id: ${request.params.id}` });
         }
         if (foundDocument.OwnerId === request.decoded.UserId) {
           foundDocument.destroy()
@@ -185,13 +184,13 @@ class DocumentsController {
   static search(request, response) {
     if (request.query.limit < 0 || request.query.offset < 0) {
       return response.status(400)
-      .send({ message: 'Only Positive integers are permitted.' });
+        .send({ message: 'Only Positive integers are permitted.' });
     }
     const queryString = request.query.query;
     const role = Math.abs(request.query.role, 10);
     const publishedDate = request.query.publishedDate;
     const order = publishedDate && /^ASC$/i.test(publishedDate)
-            ? publishedDate : 'DESC';
+      ? publishedDate : 'DESC';
 
     const query = {
       where: {

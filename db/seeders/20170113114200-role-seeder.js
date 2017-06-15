@@ -17,7 +17,7 @@ module.exports = {
 
   down(queryInterface) {
     return queryInterface.bulkDelete('Roles',
-       { title: ['regular', 'admin'] }
+      { title: ['regular', 'admin'] }
     );
   }
 };

@@ -5,7 +5,6 @@ const model = require('../models');
  * To handle routing logic for roles route
  */
 class RolesController {
-
   /**
    * Method getRoles to obtain all roles
    * @param {Object} request - request Object
@@ -49,7 +48,7 @@ class RolesController {
       .then((role) => {
         if (!role) {
           return response.status(404)
-          .send({ message: `Ǹo role with id: ${request.params.role}` });
+            .send({ message: `Ǹo role with id: ${request.params.role}` });
         }
         return response.status(200)
           .send(role);
@@ -67,7 +66,7 @@ class RolesController {
       .then((role) => {
         if (!role) {
           return response.status(404)
-          .send({ message: `Ǹo role with id: ${request.params.role}` });
+            .send({ message: `Ǹo role with id: ${request.params.role}` });
         }
 
         role.update(request.body)
@@ -89,7 +88,7 @@ class RolesController {
       .then((role) => {
         if (!role) {
           return response.status(404)
-          .send({ message: `Ǹo role with id: ${request.params.role}` });
+            .send({ message: `Ǹo role with id: ${request.params.role}` });
         }
 
         role.destroy()

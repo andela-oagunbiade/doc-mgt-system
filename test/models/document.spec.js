@@ -60,10 +60,10 @@ describe('Document Model', () => {
     });
     it('should create a document with publish date', (done) => {
       document.save()
-      .then((createdDocument) => {
-        expect(createdDocument.createdAt).to.exist;
-        done();
-      });
+        .then((createdDocument) => {
+          expect(createdDocument.createdAt).to.exist;
+          done();
+        });
     });
     it('should create a document with access set to public', (done) => {
       document.save()

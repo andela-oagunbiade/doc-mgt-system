@@ -23,7 +23,6 @@ const formattedUser = (user) => {
  * To handle routing logic for documents route
  */
 class UsersController {
-
   /**
    * Method getUsers to obtain all users
    * @param {object} request - request object
@@ -61,7 +60,6 @@ class UsersController {
           return response.status(409)
             .send({ message: `${request.body.email} is already in use` });
         }
-
         model.User.create(request.body)
           .then((newUser) => {
             const token = jwt.sign({
@@ -91,7 +89,7 @@ class UsersController {
       .then((foundUser) => {
         if (!foundUser) {
           return response.status(404)
-          .send({ message: `Ǹo user with id: ${request.params.id}` });
+            .send({ message: `Ǹo user with id: ${request.params.id}` });
         }
 
         foundUser = formattedUser(foundUser);
@@ -110,7 +108,7 @@ class UsersController {
       .then((foundUser) => {
         if (!foundUser) {
           return response.status(404)
-          .send({ message: `Ǹo user with id: ${request.params.id}` });
+            .send({ message: `Ǹo user with id: ${request.params.id}` });
         }
 
         foundUser.update(request.body)
@@ -133,7 +131,7 @@ class UsersController {
       .then((foundUser) => {
         if (!foundUser) {
           return response.status(404)
-          .send({ message: `Ǹo user with id: ${request.params.id}` });
+            .send({ message: `Ǹo user with id: ${request.params.id}` });
         }
 
         foundUser.destroy()
