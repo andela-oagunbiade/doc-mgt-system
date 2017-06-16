@@ -1,6 +1,7 @@
 /* eslint-disable require-jsdoc */
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Header from './common/Header';
 
 class App extends React.Component {

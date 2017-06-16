@@ -2,6 +2,7 @@
 /* eslint-disable class-methods-use-this */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as documentActions from '../../actions/documentsActions';
@@ -81,8 +82,6 @@ class DocumentsPage extends React.Component {
     );
   }
 }
-
-const { PropTypes } = React;
 
 DocumentsPage.propTypes = {
   documents: PropTypes.array.isRequired,
