@@ -5,6 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { PageHeader } from 'react-bootstrap';
 import * as documentActions from '../../actions/documentsActions';
 
 class DocumentsPage extends React.Component {
@@ -60,9 +61,9 @@ class DocumentsPage extends React.Component {
   render() {
     return (
       <div className="Jumbotron">
-        <h1>Documents Page</h1>
+        <PageHeader>Documents Page</PageHeader>
         {this.props.documents.map(this.documentRow)}
-        <h2> Add Document </h2>
+        <h3> Add Document </h3>
         <input
           type="text"
           onChange={this.onTitleChange}
