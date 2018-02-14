@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const accessUser = sequelize.define('accessUser', {
+  const AssessUser = sequelize.define('AssessUser', {
     name: {
       allowNull: false,
       type: DataTypes.STRING
@@ -12,7 +12,16 @@ module.exports = (sequelize, DataTypes) => {
     phoneNumber: {
       allowNull: false,
       type: DataTypes.STRING
+    },
+    relationship: {
+      defaultValue: 'co-worker',
+      allowNull: false,
+      type: DataTypes.STRING,
+      validate: {
+        isIn: [['co-worker', 'friend']]
+      }
     }
   });
+  return AssessUser;
 };
 
