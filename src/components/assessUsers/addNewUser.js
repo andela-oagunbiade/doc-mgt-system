@@ -2,7 +2,6 @@
 /* eslint-disable class-methods-use-this */
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { PageHeader, Button, FormControl, ControlLabel } from 'react-bootstrap';
 import { createAssessUser } from '../../actions/assessUserActions';
 
@@ -11,10 +10,10 @@ class CreateAssessUserPage extends Component {
     super(props, context);
 
     this.state = {
-      name: '',
-      phoneNumber: '',
-      email: '',
-      relationship: ''
+      name: null,
+      phoneNumber: null,
+      email: null,
+      relationship: null,
     };
 
     this.onChange = this.onChange.bind(this);
