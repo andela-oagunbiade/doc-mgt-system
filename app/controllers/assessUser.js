@@ -1,4 +1,4 @@
-const model = require('../models');
+import model from '../models';
 
 /**
  * Class AssessUsersController
@@ -57,4 +57,4 @@ class AssessUsersController {
   }
 }
 
-module.exports = AssessUsersController;
+export default AssessUsersController;
