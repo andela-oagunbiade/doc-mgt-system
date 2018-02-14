@@ -8,7 +8,7 @@ import Header from './components/common/Header';
 import HomePage from './components/home/HomePage';
 import DocumentsPage from './components/documents/DocumentsPage';
 import AboutPage from './components/about/AboutPage';
-
+import createAccessUser from './components/assessUsers/addNewUser';
 
 function redirectToLogin() {
   window.location.href = "/";
@@ -19,6 +19,7 @@ export default (
     <Route path="/" component={HomePage} />
     <Route path="/documents" component={DocumentsPage}/>
     <Route path="/about" component={AboutPage}/>
+    <Route path="/createAssessUser" component={createAccessUser}/>
     <Route path="*" onEnter={redirectToLogin} />
   </Route>
 );
