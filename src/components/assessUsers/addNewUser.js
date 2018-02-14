@@ -43,16 +43,7 @@ class CreateAssessUserPage extends Component {
           };
         });
       })
-      .catch((error) => {
-        const { message } = error.response.data;
-        let errorMessage;
-        switch (typeof message) {
-          case 'string':
-            errorMessage = message;
-            break;
-          default:
-            errorMessage = 'Name, Phone Number or Email cannot be empty.';
-        }
+      .catch((errorMessage) => {
         this.setState(() => {
           return {
             showAlert: true,

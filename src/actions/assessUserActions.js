@@ -1,7 +1,20 @@
 import axios from 'axios';
 
 export const createAssessUser = (user) => {
-  return axios.post(`/api/v1/assessUsers`, user);
+  return axios
+    .post(`/api/v1/assessUsers`, user)
+    .catch((error) => {
+      const { message } = error.response.data;
+      let errorMessage;
+      switch (typeof message) {
+        case 'string':
+          errorMessage = message;
+          break;
+        default:
+          errorMessage = 'Name, Phone Number or Email cannot be empty.';
+      }
+      return Promise.reject(errorMessage);
+    });
 };
 
 export const getAssessUser = () => {
