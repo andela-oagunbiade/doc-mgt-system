@@ -12,6 +12,7 @@ import homeRoute from '../config/routes/index';
 import docRoutes from '../config/routes/document';
 import userRoutes from '../config/routes/user';
 import roleRoutes from '../config/routes/role';
+import assessUserRoutes from '../config/routes/assessUser';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use(apiRoute, homeRoute);
 app.use(`${apiRoute}/documents`, docRoutes);
 app.use(`${apiRoute}/users`, userRoutes);
 app.use(`${apiRoute}/roles`, roleRoutes);
+app.use(`${apiRoute}/assessUsers`, assessUserRoutes);
 
 // This returns an error page for undefined api routes
 app.use(apiRoute, (request, response) => {
