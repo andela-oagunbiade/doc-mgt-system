@@ -29,6 +29,32 @@ class AssessUsersController {
           });
       });
   }
+
+  /**
+   * Method getUsers to obtain all users
+   * @param {object} request - request object
+   * @param {object} response - response object
+   * @returns {Object} response object
+   */
+  static getAssessUsers(request, response) {
+    model.AssessUser.findAll({
+      attributes: [
+        'id',
+        'name',
+        'phoneNumber',
+        'email',
+        'relationship',
+        'createdAt',
+        'updatedAt'
+      ]
+    }).then((users) => {
+      if (users.length === 0) {
+        return response.status(404).send({ message: 'No user found.' });
+      }
+      return response.status(200)
+        .send(users);
+    });
+  }
 }
 
 module.exports = AssessUsersController;
