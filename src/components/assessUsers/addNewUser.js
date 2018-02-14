@@ -2,7 +2,7 @@
 /* eslint-disable class-methods-use-this */
 
 import React, { Component } from 'react';
-import { PageHeader, Button, FormControl, ControlLabel } from 'react-bootstrap';
+import { PageHeader, Button, FormControl, ControlLabel, Alert } from 'react-bootstrap';
 import { createAssessUser } from '../../actions/assessUserActions';
 
 class CreateAssessUserPage extends Component {
@@ -13,11 +13,16 @@ class CreateAssessUserPage extends Component {
       name: null,
       phoneNumber: null,
       email: null,
-      relationship: null,
+      relationship: 'co-worker',
+      showAlert: false,
+      errorMessage: null,
     };
 
     this.onChange = this.onChange.bind(this);
     this.onClickSave = this.onClickSave.bind(this);
+    this.handleDismiss = this.handleDismiss.bind(this);
+    this.displayErrorAlert = this.displayErrorAlert.bind(this);
+    this.displaySuccessAlert = this.displaySuccessAlert.bind(this);
   }
 
   onChange(event) {
@@ -29,7 +34,59 @@ class CreateAssessUserPage extends Component {
 
   onClickSave(event) {
     event.preventDefault();
-    createAssessUser(this.state);
+    createAssessUser(this.state)
+      .then(() => {
+        this.setState(() => {
+          return {
+            showAlert: true,
+            successMessage: 'Successfully added new user.'
+          };
+        });
+      })
+      .catch((error) => {
+        const { message } = error.response.data;
+        let errorMessage;
+        switch (typeof message) {
+          case 'string':
+            errorMessage = message;
+            break;
+          default:
+            errorMessage = 'Name, Phone Number or Email cannot be empty.';
+        }
+        this.setState(() => {
+          return {
+            showAlert: true,
+            errorMessage
+          };
+        });
+      });
+  }
+
+  handleDismiss() {
+    this.setState(() => {
+      return {
+        showAlert: false,
+        errorMessage: false
+      };
+    });
+  }
+
+  displayErrorAlert() {
+    return (
+      <Alert bsStyle="danger" onDismiss={this.handleDismiss}>
+        <h4>Oh snap! You got an error!</h4>
+        {this.state.errorMessage}
+      </Alert>
+    );
+  }
+
+  displaySuccessAlert() {
+    return (
+      <Alert bsStyle="success" onDismiss={this.handleDismiss}>
+        <h4>Yay!!!</h4>
+        {this.state.successMessage}
+      </Alert>
+    );
   }
 
   render() {
@@ -37,11 +94,14 @@ class CreateAssessUserPage extends Component {
       paddingRight: 10,
       paddingLeft: 5
     };
+    const { showAlert, errorMessage, successMessage } = this.state;
 
     return (
       <div className="Jumbotron">
         <PageHeader>Welcome To Assessment Page</PageHeader>
         <h3> Submit Info </h3>
+        {showAlert && errorMessage ? this.displayErrorAlert() : null}
+        {showAlert && successMessage ? this.displaySuccessAlert() : null}
         <div style={{ width: 500 }}>
           <ControlLabel>Name</ControlLabel>
           <FormControl
