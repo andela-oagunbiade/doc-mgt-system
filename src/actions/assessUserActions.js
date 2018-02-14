@@ -8,7 +8,7 @@ export const getAssessUser = () => {
   return axios.get(`/api/v1/assessUsers`);
 };
 
-export const SMS = (info) => {
+export const sendSMS = (sender, receiver, message) => {
   const requestConfig = {
     baseURL: SmsServer.baseUrl,
     auth: {
@@ -21,9 +21,9 @@ export const SMS = (info) => {
   return request
     .post('/sms/1/text/single',
     {
-      from: 'Assessment App',
-      to: '+2348167304897',
-      text: 'Test SMS from assessment app'
+      from: sender,
+      to: receiver,
+      text: message
     })
     .then((response) => {
       console.log('response======>', response);
