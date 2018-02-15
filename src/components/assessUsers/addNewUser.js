@@ -2,7 +2,7 @@
 /* eslint-disable class-methods-use-this */
 
 import React, { Component } from 'react';
-import { PageHeader, Button, FormControl, ControlLabel, Alert } from 'react-bootstrap';
+import { PageHeader, Button, FormControl, FormGroup, ControlLabel, Alert } from 'react-bootstrap';
 import { createAssessUser } from '../../actions/assessUserActions';
 
 class CreateAssessUserPage extends Component {
@@ -16,9 +16,15 @@ class CreateAssessUserPage extends Component {
       relationship: 'co-worker',
       showAlert: false,
       errorMessage: null,
+      disableCreateUserButton: true
     };
 
     this.onChange = this.onChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handlePhoneNumberChange = this.handlePhoneNumberChange.bind(this);
+    this.validateEmail = this.validateEmail.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.disableCreateUserButton = this.disableCreateUserButton.bind(this);
     this.onClickSave = this.onClickSave.bind(this);
     this.handleErrorDismiss = this.handleErrorDismiss.bind(this);
     this.handleSuccessDismiss = this.handleSuccessDismiss.bind(this);
@@ -31,6 +37,116 @@ class CreateAssessUserPage extends Component {
     this.setState(() => {
       return { [name]: value };
     });
+  }
+
+  handleNameChange(event) {
+    const { value } = event.target;
+    let nameValidationState;
+
+    if (value.length > 2) {
+      nameValidationState = 'success';
+    } else {
+      nameValidationState = 'error';
+    }
+
+    this.setState(() => {
+      return {
+        name: value,
+        nameValidationState
+      };
+    });
+
+    const disableCreateUserButton = this.disableCreateUserButton();
+    this.setState(() => {
+      return {
+        disableCreateUserButton
+      };
+    });
+  }
+
+  handlePhoneNumberChange(event) {
+    const { value } = event.target;
+    let phoneValidationState;
+
+    if (value.length === 11) {
+      phoneValidationState = 'success';
+    } else {
+      phoneValidationState = 'error';
+    }
+
+    this.setState(() => {
+      return {
+        phoneNumber: value,
+        phoneValidationState
+      };
+    });
+
+    const disableCreateUserButton = this.disableCreateUserButton();
+    this.setState(() => {
+      return {
+        disableCreateUserButton
+      };
+    });
+  }
+
+  validateEmail(email) {
+    // eslint-disable-next-line no-useless-escape
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email.toLowerCase());
+  }
+
+  handleEmailChange(event) {
+    const { value } = event.target;
+    let emailValidationState;
+
+    if (this.validateEmail(value)) {
+      emailValidationState = 'success';
+    } else {
+      emailValidationState = 'error';
+    }
+
+    this.setState(() => {
+      return {
+        email: value,
+        emailValidationState
+      };
+    });
+
+    const disableCreateUserButton = this.disableCreateUserButton();
+    this.setState(() => {
+      return {
+        disableCreateUserButton
+      };
+    });
+  }
+
+  disableCreateUserButton() {
+    const {
+      name,
+      phoneNumber,
+      email,
+      nameValidationState,
+      phoneValidationState,
+      emailValidationState
+    } = this.state;
+
+    const checKFields = () => {
+      if ((name === '') || (phoneNumber === '') || (email === '')) {
+        return true;
+      }
+      return false;
+    };
+
+    const checkValidationStates = () => {
+      const error = ('error' || undefined);
+
+      if ((nameValidationState === error) || (phoneValidationState === error)
+      || (emailValidationState === error)) {
+        return true;
+      }
+      return false;
+    };
+    return (checKFields() || checkValidationStates());
   }
 
   onClickSave(event) {
@@ -107,29 +223,35 @@ class CreateAssessUserPage extends Component {
         {showAlert && errorMessage ? this.displayErrorAlert() : null}
         {showAlert && successMessage ? this.displaySuccessAlert() : null}
         <div style={{ width: 500 }}>
-          <ControlLabel>Name</ControlLabel>
-          <FormControl
-            name="name"
-            type="text"
-            value={this.state.name}
-            onChange={this.onChange}
-          />
+          <FormGroup validationState={this.state.nameValidationState}>
+            <ControlLabel>Name</ControlLabel>
+            <FormControl
+              name="name"
+              type="text"
+              value={this.state.name}
+              onChange={this.handleNameChange}
+            />
+          </FormGroup>
           <br />
-          <ControlLabel>Phone Number</ControlLabel>
-          <FormControl
-            name="phoneNumber"
-            type="text"
-            value={this.state.phoneNumber}
-            onChange={this.onChange}
-          />
+          <FormGroup validationState={this.state.phoneValidationState}>
+            <ControlLabel>Phone Number</ControlLabel>
+            <FormControl
+              name="phoneNumber"
+              type="number"
+              value={this.state.phoneNumber}
+              onChange={this.handlePhoneNumberChange}
+            />
+          </FormGroup>
           <br />
-          <ControlLabel>Email</ControlLabel>
-          <FormControl
-            name="email"
-            type="email"
-            value={this.state.email}
-            onChange={this.onChange}
-          />
+          <FormGroup validationState={this.state.emailValidationState}>
+            <ControlLabel>Email</ControlLabel>
+            <FormControl
+              name="email"
+              type="email"
+              value={this.state.email}
+              onChange={this.handleEmailChange}
+            />
+          </FormGroup>
           <br />
           <ControlLabel>Relationship</ControlLabel>
           <div style={style}>
@@ -151,6 +273,7 @@ class CreateAssessUserPage extends Component {
           <br />
           <Button
             bsStyle="primary"
+            disabled={this.state.disableCreateUserButton}
             onClick={this.onClickSave}
           >
             Create User
