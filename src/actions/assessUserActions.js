@@ -21,6 +21,14 @@ export const getAssessUser = () => {
   return axios.get(`/api/v1/assessUsers`);
 };
 
+export const addNigeriaCountryPrefix = (number) => {
+  const numArray = number.split('');
+  if (numArray[0] === '0') {
+    numArray.splice(0, 1);
+  }
+  return `+234${numArray.join('')}`;
+};
+
 export const sendSMS = (sender, receiver, message) => {
   const requestConfig = {
     baseURL: SmsServer.baseUrl,
@@ -35,7 +43,7 @@ export const sendSMS = (sender, receiver, message) => {
     .post('/sms/1/text/single',
     {
       from: sender,
-      to: receiver,
+      to: addNigeriaCountryPrefix(receiver),
       text: message
     })
     .then((response) => {
