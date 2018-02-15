@@ -45,11 +45,5 @@ export const sendSMS = (sender, receiver, message) => {
       from: sender,
       to: addNigeriaCountryPrefix(receiver),
       text: message
-    })
-    .then((response) => {
-      console.log('response======>', response);
-    })
-    .catch((error) => {
-      console.log('Error======>', error);
     });
 };

@@ -16,6 +16,7 @@ class CreateAssessUserPage extends Component {
       relationship: 'co-worker',
       showAlert: false,
       errorMessage: null,
+      successMessage: null,
       disableCreateUserButton: true
     };
 
