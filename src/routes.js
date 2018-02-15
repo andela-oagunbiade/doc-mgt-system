@@ -20,8 +20,8 @@ export default (
     <Route path="/" component={HomePage} />
     <Route path="/documents" component={DocumentsPage}/>
     <Route path="/about" component={AboutPage}/>
-    <Route path="/createAssessUser" component={CreateAccessUser}/>
-    <Route path="/viewAssessUser" component={ViewAssessUsersPage}/>
+    <Route path="/createUser" component={CreateAccessUser}/>
+    <Route path="/viewUsers" component={ViewAssessUsersPage}/>
     <Route path="*" onEnter={redirectToLogin} />
   </Route>
 );

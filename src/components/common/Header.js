@@ -17,13 +17,19 @@ const Header = () => {
         <NavItem eventKey={2}>
           <Link to="about" activeClassName="active">About</Link>
         </NavItem>
+        <NavItem eventKey={3}>
+          <Link to="createUser" activeClassName="active">Create User</Link>
+        </NavItem>
+        <NavItem eventKey={4}>
+          <Link to="viewUsers" activeClassName="active">View Users</Link>
+        </NavItem>
       </Nav>
       <Nav pullRight>
-        <NavDropdown eventKey={3} title="Login Actions" id="basic-nav-dropdown">
-          <MenuItem eventKey={3.1}>Login</MenuItem>
-          <MenuItem eventKey={3.2}>Sign Up</MenuItem>
+        <NavDropdown eventKey={5} title="Login Actions" id="basic-nav-dropdown">
+          <MenuItem eventKey={5.1}>Login</MenuItem>
+          <MenuItem eventKey={5.2}>Sign Up</MenuItem>
           <MenuItem divider />
-          <MenuItem eventKey={3.3}>Request Admin Access</MenuItem>
+          <MenuItem eventKey={5.3}>Request Admin Access</MenuItem>
         </NavDropdown>
       </Nav>
     </Navbar>
