@@ -10,9 +10,9 @@ class CreateAssessUserPage extends Component {
     super(props, context);
 
     this.state = {
-      name: null,
-      phoneNumber: null,
-      email: null,
+      name: '',
+      phoneNumber: '',
+      email: '',
       relationship: 'co-worker',
       showAlert: false,
       errorMessage: null,
@@ -20,7 +20,8 @@ class CreateAssessUserPage extends Component {
 
     this.onChange = this.onChange.bind(this);
     this.onClickSave = this.onClickSave.bind(this);
-    this.handleDismiss = this.handleDismiss.bind(this);
+    this.handleErrorDismiss = this.handleErrorDismiss.bind(this);
+    this.handleSuccessDismiss = this.handleSuccessDismiss.bind(this);
     this.displayErrorAlert = this.displayErrorAlert.bind(this);
     this.displaySuccessAlert = this.displaySuccessAlert.bind(this);
   }
@@ -53,18 +54,30 @@ class CreateAssessUserPage extends Component {
       });
   }
 
-  handleDismiss() {
+  handleErrorDismiss() {
     this.setState(() => {
       return {
         showAlert: false,
-        errorMessage: false
+        errorMessage: null
+      };
+    });
+  }
+
+  handleSuccessDismiss() {
+    this.setState(() => {
+      return {
+        showAlert: false,
+        successMessage: null,
+        name: '',
+        phoneNumber: '',
+        email: '',
       };
     });
   }
 
   displayErrorAlert() {
     return (
-      <Alert bsStyle="danger" onDismiss={this.handleDismiss}>
+      <Alert bsStyle="danger" onDismiss={this.handleErrorDismiss}>
         <h4>Oh snap! You got an error!</h4>
         {this.state.errorMessage}
       </Alert>
@@ -73,7 +86,7 @@ class CreateAssessUserPage extends Component {
 
   displaySuccessAlert() {
     return (
-      <Alert bsStyle="success" onDismiss={this.handleDismiss}>
+      <Alert bsStyle="success" onDismiss={this.handleSuccessDismiss}>
         <h4>Yay!!!</h4>
         {this.state.successMessage}
       </Alert>
@@ -98,6 +111,7 @@ class CreateAssessUserPage extends Component {
           <FormControl
             name="name"
             type="text"
+            value={this.state.name}
             onChange={this.onChange}
           />
           <br />
@@ -105,6 +119,7 @@ class CreateAssessUserPage extends Component {
           <FormControl
             name="phoneNumber"
             type="text"
+            value={this.state.phoneNumber}
             onChange={this.onChange}
           />
           <br />
@@ -112,6 +127,7 @@ class CreateAssessUserPage extends Component {
           <FormControl
             name="email"
             type="email"
+            value={this.state.email}
             onChange={this.onChange}
           />
           <br />
