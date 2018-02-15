@@ -188,6 +188,9 @@ class CreateAssessUserPage extends Component {
         name: '',
         phoneNumber: '',
         email: '',
+        nameValidationState: undefined,
+        phoneValidationState: undefined,
+        emailValidationState: undefined
       };
     });
   }
