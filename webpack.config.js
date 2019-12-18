@@ -1,5 +1,8 @@
 import webpack from 'webpack';
 import path from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export default {
   debug: true,
@@ -23,7 +26,12 @@ export default {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
-      PORT: JSON.stringify(process.env.PORT)
+      PORT: JSON.stringify(process.env.PORT),
+      SmsServer: {
+        baseUrl: JSON.stringify(process.env.SMS_SERVER_URL),
+        username: JSON.stringify(process.env.SMS_SERVER_USERNAME),
+        password: JSON.stringify(process.env.SMS_SERVER_PASSWORD)
+      }
     })
   ],
   module: {
